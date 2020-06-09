@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 
@@ -10,12 +11,30 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
+
   
-  <meta name="keywords" content="一只小安仔,"> 
+  <meta name="keywords" content="zhaoo, hexo-theme-zhaoo,"> 
   
   
   <meta name="author" content="junan"> 
-  <link rel="shortcut icon" href="/blog/image/logo.png">
+
+  
+    <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  
+  
+    <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  
+  
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  
+  
+    <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
   
 <link rel="stylesheet" href="/blog/css/style.css">
 
@@ -51,31 +70,30 @@
     var CONFIG = window.CONFIG || {}
     CONFIG = {
       fancybox: true,
-      pjax: true,
-      lazyload: true,
-      donate_alipay: '',
-      donate_wechat: '',
-      gitalk: {
-        enable: false,
-        clientID: '',
-        clientSecret: '',
-        id: window.location.pathname,
-        repo: '',
-        owner: '',
-        admin: ''
+      pjax: false,
+      lazyload: {
+        enable: true,
+        loadingImage: '/images/theme/loading.gif',
       },
+      donate_alipay: 'https://pic.izhaoo.com/alipay.jpg',
+      donate_wechat: 'https://pic.izhaoo.com/wechat.jpg',
       motto: {
         api: '',
-        default: '心中有沟壑，眉目做山河。'
+        default: '我在开了灯的床头下，想问问自己的心啊。'
       },
       galleries: {
         enable: 'true'
+      },
+      fab: {
+        enable: 'true',
+        alwaysShow: 'false'
       }
     }
   </script>
 
   
 
+  
 <meta name="generator" content="Hexo 4.2.0"></head>
 <body class="lock-screen">
   <div class="loading"></div>
@@ -89,6 +107,11 @@
     
     
     <li class="menu-item"><a href="/ "> 首页</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/galleries "> 摄影</a></li>
     
     
     
@@ -111,13 +134,13 @@
     <li class="menu-item"><a href="/about "> 关于</a></li>
     
   </ul>
-  <div class="menu-copyright"><p>Copyright© 2019-2019 | <a target="_blank" href="https://www.izhaoo.com">zhaoo</a> .AllRightsReserved</p></div>
+  <div class="menu-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="https://www.izhaoo.com">zhaoo</a> .AllRightsReserved</p></div>
 </nav>
   <main id="main">
   
     <div class="preview">
   <div class="preview-image">
-    <h2 class="preview-tagline" id="motto" style="color: #FFFFFF"></h2>
+    <h2 class="preview-tagline" id="motto"></h2>
     
     <div class="preview-overlay">
       <svg class="preview-waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -125,7 +148,7 @@
         <defs>
           <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
         </defs>
-        <g class="preview-parallax">asfdsdf
+        <g class="preview-parallax">
           <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
           <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
           <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
@@ -147,7 +170,7 @@
   <div class="post-wrap">
     
     <a href="/blog/2020/05/06/hello-world%20-%20%E5%89%AF%E6%9C%AC%20(8)/" class="post-image">
-      <img      class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g2/M00/0A/0B/ChMlWlz3Vn6IGfE-AAL7R8iWtHgAAKkXwKJxYMAAvtf927.jpg"  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="     draggable="false">
+      <img   class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g2/M00/0A/0B/ChMlWlz3Vn6IGfE-AAL7R8iWtHgAAKkXwKJxYMAAvtf927.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
     </a>
     <div class="post-content">
       <h3 class="post-title"><a href="/blog/2020/05/06/hello-world%20-%20%E5%89%AF%E6%9C%AC%20(8)/">Hello World</a></h3>
@@ -171,7 +194,7 @@
   <div class="post-wrap">
     
     <a href="/blog/2020/05/06/hello-world%20-%20%E5%89%AF%E6%9C%AC%20(7)/" class="post-image">
-      <img      class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g2/M00/0A/0B/ChMlWlz3Vn6IGfE-AAL7R8iWtHgAAKkXwKJxYMAAvtf927.jpg"  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="     draggable="false">
+      <img   class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g2/M00/0A/0B/ChMlWlz3Vn6IGfE-AAL7R8iWtHgAAKkXwKJxYMAAvtf927.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
     </a>
     <div class="post-content">
       <h3 class="post-title"><a href="/blog/2020/05/06/hello-world%20-%20%E5%89%AF%E6%9C%AC%20(7)/">Hello World</a></h3>
@@ -195,7 +218,7 @@
   <div class="post-wrap">
     
     <a href="/blog/2020/05/06/hello-world%20-%20%E5%89%AF%E6%9C%AC%20(6)/" class="post-image">
-      <img      class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g2/M00/0A/0B/ChMlWlz3Vn6IGfE-AAL7R8iWtHgAAKkXwKJxYMAAvtf927.jpg"  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="     draggable="false">
+      <img   class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g2/M00/0A/0B/ChMlWlz3Vn6IGfE-AAL7R8iWtHgAAKkXwKJxYMAAvtf927.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
     </a>
     <div class="post-content">
       <h3 class="post-title"><a href="/blog/2020/05/06/hello-world%20-%20%E5%89%AF%E6%9C%AC%20(6)/">Hello World</a></h3>
@@ -219,7 +242,7 @@
   <div class="post-wrap">
     
     <a href="/blog/2020/05/06/hello-world%20-%20%E5%89%AF%E6%9C%AC%20(5)/" class="post-image">
-      <img      class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g2/M00/0A/0B/ChMlWlz3Vn6IGfE-AAL7R8iWtHgAAKkXwKJxYMAAvtf927.jpg"  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="     draggable="false">
+      <img   class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g2/M00/0A/0B/ChMlWlz3Vn6IGfE-AAL7R8iWtHgAAKkXwKJxYMAAvtf927.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
     </a>
     <div class="post-content">
       <h3 class="post-title"><a href="/blog/2020/05/06/hello-world%20-%20%E5%89%AF%E6%9C%AC%20(5)/">Hello World</a></h3>
@@ -243,7 +266,7 @@
   <div class="post-wrap">
     
     <a href="/blog/2020/05/06/hello-world%20-%20%E5%89%AF%E6%9C%AC%20(4)/" class="post-image">
-      <img      class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g2/M00/0A/0B/ChMlWlz3Vn6IGfE-AAL7R8iWtHgAAKkXwKJxYMAAvtf927.jpg"  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="     draggable="false">
+      <img   class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g2/M00/0A/0B/ChMlWlz3Vn6IGfE-AAL7R8iWtHgAAKkXwKJxYMAAvtf927.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
     </a>
     <div class="post-content">
       <h3 class="post-title"><a href="/blog/2020/05/06/hello-world%20-%20%E5%89%AF%E6%9C%AC%20(4)/">Hello World</a></h3>
@@ -267,7 +290,7 @@
   <div class="post-wrap">
     
     <a href="/blog/2020/05/06/hello-world%20-%20%E5%89%AF%E6%9C%AC%20(3)/" class="post-image">
-      <img      class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g2/M00/0A/0B/ChMlWlz3Vn6IGfE-AAL7R8iWtHgAAKkXwKJxYMAAvtf927.jpg"  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="     draggable="false">
+      <img   class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g2/M00/0A/0B/ChMlWlz3Vn6IGfE-AAL7R8iWtHgAAKkXwKJxYMAAvtf927.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
     </a>
     <div class="post-content">
       <h3 class="post-title"><a href="/blog/2020/05/06/hello-world%20-%20%E5%89%AF%E6%9C%AC%20(3)/">Hello World</a></h3>
@@ -291,7 +314,7 @@
   <div class="post-wrap">
     
     <a href="/blog/2020/05/06/hello-world%20-%20%E5%89%AF%E6%9C%AC%20(2)/" class="post-image">
-      <img      class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g2/M00/0A/0B/ChMlWlz3Vn6IGfE-AAL7R8iWtHgAAKkXwKJxYMAAvtf927.jpg"  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="     draggable="false">
+      <img   class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g2/M00/0A/0B/ChMlWlz3Vn6IGfE-AAL7R8iWtHgAAKkXwKJxYMAAvtf927.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
     </a>
     <div class="post-content">
       <h3 class="post-title"><a href="/blog/2020/05/06/hello-world%20-%20%E5%89%AF%E6%9C%AC%20(2)/">Hello World</a></h3>
@@ -315,7 +338,7 @@
   <div class="post-wrap">
     
     <a href="/blog/2020/05/06/hello-world%20-%20%E5%89%AF%E6%9C%AC/" class="post-image">
-      <img      class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g2/M00/0A/0B/ChMlWlz3Vn6IGfE-AAL7R8iWtHgAAKkXwKJxYMAAvtf927.jpg"  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="     draggable="false">
+      <img   class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g2/M00/0A/0B/ChMlWlz3Vn6IGfE-AAL7R8iWtHgAAKkXwKJxYMAAvtf927.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
     </a>
     <div class="post-content">
       <h3 class="post-title"><a href="/blog/2020/05/06/hello-world%20-%20%E5%89%AF%E6%9C%AC/">Hello World</a></h3>
@@ -339,7 +362,7 @@
   <div class="post-wrap">
     
     <a href="/blog/2020/05/06/hello-world%202/" class="post-image">
-      <img      class="lazyload" data-original="/blog/"  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  class="lazyload" data-original="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="     draggable="false">
+      <img   class="lazyload" data-original="/blog/images/theme/post-image.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
     </a>
     <div class="post-content">
       <h3 class="post-title"><a href="/blog/2020/05/06/hello-world%202/">Hello World</a></h3>
@@ -416,9 +439,10 @@
     </a>
     
   </div>
-  <div class="footer-copyright"><p>Copyright© 2019-2019 | <a target="_blank" href="https://www.izhaoo.com">zhaoo</a> .AllRightsReserved</p></div>
+  <div class="footer-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="https://www.izhaoo.com">zhaoo</a> .AllRightsReserved</p></div>
 </footer>
-    <div class="fab fab-plus">
+  
+      <div class="fab fab-plus">
     <i class="iconfont iconplus"></i>
   </div>
   <div class="fab fab-up">
@@ -427,6 +451,7 @@
   <div class="fab fab-menu">
     <i class="iconfont iconmenu"></i>
   </div>
+  
 </body>
 
 
@@ -440,11 +465,6 @@
 <script src="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 
 
-
-
-
-
-<script src="https://cdn.bootcss.com/jquery.pjax/2.0.1/jquery.pjax.min.js"></script>
 
 
 
@@ -466,6 +486,30 @@
 
 
 <script src="/blog/js/script.js"></script>
+
+
+
+<script>
+  (function () {
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    } else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+
+
+
+
 
 
 
