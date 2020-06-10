@@ -1,0 +1,495 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>浅谈几种排序算法 - 一只小安仔</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+
+  
+  <meta name="keywords" content="一只小安仔,"> 
+  
+  <meta name="description" content="浅谈几种排序算法
+ 先看看冒泡排序吧。
+
+
+原理很简单..."> 
+  
+  <meta name="author" content="junan"> 
+
+  
+    <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  
+  
+    <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  
+  
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  
+  
+    <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_58xq2j9v1id.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xcode.min.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/justifiedGallery/3.7.0/css/justifiedGallery.min.css">
+
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {}
+    CONFIG = {
+      fancybox: true,
+      pjax: false,
+      lazyload: {
+        enable: true,
+        loadingImage: '/blog/images/theme/loading.gif',
+      },
+      donate_alipay: '',
+      donate_wechat: '',
+      motto: {
+        api: '',
+        default: '夜半花落听雨声，不自欢喜不自愁。'
+      },
+      galleries: {
+        enable: 'true'
+      },
+      fab: {
+        enable: 'true',
+        alwaysShow: 'false'
+      }
+    }
+  </script>
+
+  
+
+  
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body class="lock-screen">
+  <div class="loading"></div>
+  <nav class="menu">
+  <div class="menu-close">
+    <i class="iconfont iconplus"></i>
+  </div>
+  <ul class="menu-content">
+    
+    
+    
+    
+    <li class="menu-item"><a href="/ "> 首页</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/about "> 关于</a></li>
+    
+  </ul>
+  <div class="menu-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="http://junanaa.gitee.io/">一只小安仔</a> .AllRightsReserved</p></div>
+</nav>
+  <main id="main">
+  <div class="container" id="container">
+    <article class="article">
+  <section class="head">
+  <img   class="lazyload" data-original="https://www.banbaowang.com/uploads/allimg/190813/49-1ZQ30ZZ10-L.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">浅谈几种排序算法</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>2020-05-06</span
+        class="post-info-item">
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>12436</span>
+    </div>
+  </div>
+</section>
+  <section class="main">
+    <section class="content">
+      <h1 id="浅谈几种排序算法"><a href="#浅谈几种排序算法" class="headerlink" title="浅谈几种排序算法"></a>浅谈几种排序算法</h1><blockquote>
+<p> 先看看冒泡排序吧。</p>
+</blockquote>
+<blockquote>
+<p>原理很简单哈，数组中两两比较，如果你是从小到大排序，就把大的往后移动。</p>
+</blockquote>
+<blockquote>
+<p>说白了，两数个比较，如果前一个比后一个大，就交换两个的位置。</p>
+</blockquote>
+<blockquote>
+<p>整个代码两层for循环嵌套。精华就下面这坨。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 不要紧张，这个numbers就是一个整数数组，里面装的数据是混乱的，我们准备把他排序。</span><br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; numbers.length - <span class="hljs-number">1</span>; i++)&#123;            <span class="hljs-comment">//为啥 length - 1，因为-1次循环可以排完序了，你多循环一次没啥用。 </span><br>         <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; numbers.length - i -<span class="hljs-number">1</span>; j++) &#123;   <span class="hljs-comment">//为啥length - i - 1，-1跟上面一样，-i下面讲</span><br>             <span class="hljs-keyword">if</span>(numbers[j] &gt; numbers[j + <span class="hljs-number">1</span>]) &#123;   <span class="hljs-comment">//这里也不要紧张，通过异或运算（^）交换**整数**numbers[j]和**整数**numbers[j + 1]的值，不信你试试</span><br>                 numbers[j] ^= numbers[j+<span class="hljs-number">1</span>];<br>                 numbers[j+<span class="hljs-number">1</span>] ^= numbers[j];<br>                 numbers[j] ^= numbers[j+<span class="hljs-number">1</span>];<br>             &#125;<br>         &#125;<br>     &#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p> 理解不了就死背代码吧。</p>
+</blockquote>
+<blockquote>
+<p> 算法里面有个叫稳定性的东西：<br> 稳定 ：当a &gt; b，就不会交换两个数的位置。<br> 不稳定：当a &gt; b,  可能发生两个数交换位置。<br> 所以，冒泡是稳定的。</p>
+</blockquote>
+<blockquote>
+<p> 但是在时间方面比较慢。我测试10000个打乱的int数从小到大排序五次，花费时间分别为： 220ms   202ms  234ms  253ms  227ms</p>
+</blockquote>
+<blockquote>
+<p>整个测试代码如下：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        <span class="hljs-keyword">int</span>[] a = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[<span class="hljs-number">10000</span>];<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; a.length; i++) &#123;<br>            a[i] = (<span class="hljs-keyword">int</span>)(Math.random() * <span class="hljs-number">10000</span>);<br>        &#125;<br>        <span class="hljs-comment">//冒泡排序</span><br>        bubbleSort(a.clone());       <span class="hljs-comment">//由于我测试多种排序使用同一初始数组，所以克隆一下。</span><br>    &#125;<br><br>    <span class="hljs-comment">//冒泡排序</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">bubbleSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] numbers)</span> </span>&#123;<br>        <span class="hljs-keyword">long</span> start = System.currentTimeMillis();    <span class="hljs-comment">//记录初始时间</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; numbers.length - <span class="hljs-number">1</span>; i++)&#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; numbers.length - i -<span class="hljs-number">1</span>; j++) &#123;<br>                <span class="hljs-keyword">if</span>(numbers[j] &gt; numbers[j + <span class="hljs-number">1</span>]) &#123;<br>                    numbers[j] ^= numbers[j+<span class="hljs-number">1</span>];<br>                    numbers[j+<span class="hljs-number">1</span>] ^= numbers[j];<br>                    numbers[j] ^= numbers[j+<span class="hljs-number">1</span>];<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">long</span> end = System.currentTimeMillis();   <span class="hljs-comment">//记录结束时间</span><br>        System.out.println(Arrays.toString(numbers));<br>        System.out.println(<span class="hljs-string">"冒泡排序时间:"</span> + (end - start));<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+
+<blockquote>
+<p> ok， 下面再看看快速排序。</p>
+</blockquote>
+<blockquote>
+<p> 这个快速排序理论有点复杂。</p>
+</blockquote>
+<blockquote>
+<p>看这个图哈（刚刚盗的）。</p>
+</blockquote>
+<p><img   class="lazyload" data-original="https://upload-images.jianshu.io/upload_images/16609043-d74a17d37f94de35?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="image"></p>
+<blockquote>
+<p> 这个数组第一个数是6， ok，接下来注意， 从<strong>右往左</strong> 找到一个<strong>比6小</strong>的数，<strong>从左往右</strong>找到一个<strong>比6大</strong>的数，然后交换这个数的位置。如下：</p>
+</blockquote>
+<blockquote>
+<p><img   class="lazyload" data-original="https://upload-images.jianshu.io/upload_images/16609043-71b4aa2479fd837c?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="快速排序"></p>
+</blockquote>
+<blockquote>
+<p> <img   class="lazyload" data-original="https://upload-images.jianshu.io/upload_images/16609043-e8eaa11ad578ce94?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="快速排序"></p>
+</blockquote>
+<blockquote>
+<p>依次这样，注意哈，必须每次都从右边开始找。知道从两边找的时候相遇。</p>
+</blockquote>
+<blockquote>
+<p><img   class="lazyload" data-original="https://upload-images.jianshu.io/upload_images/16609043-8c3835ba3575946a?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="快速排序"></p>
+</blockquote>
+<blockquote>
+<p>然后把最中间这个数和第一个数6做交换。</p>
+</blockquote>
+<blockquote>
+<p><img   class="lazyload" data-original="https://upload-images.jianshu.io/upload_images/16609043-c73ea01786ba2347?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="快速排序"></p>
+</blockquote>
+<blockquote>
+<p><img   class="lazyload" data-original="https://upload-images.jianshu.io/upload_images/16609043-cf504e11e79401ab?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="快速排序"></p>
+</blockquote>
+<blockquote>
+<p> 从中间的6为界限，把整个需要排序的数组分成两部分。左边为3， 1， 2， 5， 4； 右边是9， 7， 10， 8；</p>
+</blockquote>
+<blockquote>
+<p> 可以看出，已经把大于6和小于6的分开了，接下来嘛，把这两部分按之前的办法继续排就行。</p>
+</blockquote>
+<blockquote>
+<p> 当然，代码上需要使用到递归的方法。所以一开始啊就要设计好一个方法用来递归的调用。</p>
+</blockquote>
+<blockquote>
+<p>递归方法设计如下：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//且看，这里传入了三个参数，第一个参数a 表示要排序的整个的数组，start表示从这个数组的排序起始位置，end则表示这个数组的排序结束位置。</span><br><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">quickSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] a, <span class="hljs-keyword">int</span> start, <span class="hljs-keyword">int</span> end)</span></span>&#123;<br>        <span class="hljs-keyword">if</span>(end &lt; start)     <span class="hljs-comment">//结束位置大于起始位置，表示排完了，方法直接结束。</span><br>            <span class="hljs-keyword">return</span> ;<br>        <span class="hljs-keyword">int</span> key = a[start];     <span class="hljs-comment">//记录需要排序的的哥元素，比如之前我们说的6</span><br>        <span class="hljs-keyword">int</span> i = start;          <span class="hljs-comment">//记录排序起始位置和结束位置</span><br>        <span class="hljs-keyword">int</span> j = end;<br>       <span class="hljs-comment">//这个循环就是循环从右开始找比第一个数小的和从左开始找比第一个数大的做交换</span><br>        <span class="hljs-keyword">while</span>(i &lt; j) &#123;<br>            <span class="hljs-comment">//先从右找（必须）小于key的值，找到了就跳出循环</span><br>            <span class="hljs-keyword">while</span>(a[j] &gt;= key &amp;&amp; i &lt; j)&#123;<br>                j--;<br>            &#125;<br>           <span class="hljs-comment">// 再从左找大于key的值，找到就跳出循环</span><br>            <span class="hljs-keyword">while</span>(a[i] &lt;= key &amp;&amp; i &lt; j)&#123;<br>                i++;<br>            &#125;<br>            <span class="hljs-comment">// 从右找的满足条件的下标**大于**从左找到满足条件的下标，就交换两个数的值</span><br>            <span class="hljs-keyword">if</span>(i &lt; j) &#123;<br>                a[i] ^= a[j];<br>                a[j] ^= a[i];<br>                a[i] ^= a[j];<br>            &#125;<br>        &#125;<br>        <span class="hljs-comment">//交换最中间的数和第一个被选择的数</span><br>        a[start] = a[i];<br>        a[i] = key;<br>        <span class="hljs-comment">//递归分出来的左部分</span><br>        quickSort(a, start, i - <span class="hljs-number">1</span>);<br>        <span class="hljs-comment">//递归分出来的右部分</span><br>        quickSort(a, i + <span class="hljs-number">1</span>, end);<br>       <span class="hljs-comment">//中间那个数就不参与排序了。</span><br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p> 我测试五组数据，花费时间如下：6ms，4ms，0ms，5ms，5ms</p>
+</blockquote>
+<blockquote>
+<p> 测试代码如下：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>      <span class="hljs-keyword">int</span>[] a = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[<span class="hljs-number">10000</span>];<br>      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; a.length; i++) &#123;<br>          a[i] = (<span class="hljs-keyword">int</span>)(Math.random() * <span class="hljs-number">10000</span>);<br>      &#125;<br>      System.out.println(Arrays.toString(a));<br>      <span class="hljs-comment">//快速排序</span><br>      quickSort(a.clone());<br>  &#125;<br><br>  <span class="hljs-comment">//快速排序</span><br>  <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">quickSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] numbers)</span></span>&#123;<br>      <span class="hljs-keyword">long</span> start = System.currentTimeMillis();<br>      quickSort(numbers, <span class="hljs-number">0</span>, numbers.length - <span class="hljs-number">1</span>);<br>      <span class="hljs-keyword">long</span> end = System.currentTimeMillis();<br>      System.out.println(Arrays.toString(numbers));<br>      System.out.println(<span class="hljs-string">"快速排序时间:"</span> + (end - start));<br>  &#125;<br><br>  <span class="hljs-comment">//被递归的方法</span><br>  <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">quickSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] a, <span class="hljs-keyword">int</span> start, <span class="hljs-keyword">int</span> end)</span></span>&#123;<br>      <span class="hljs-keyword">if</span>(end &lt; start)<br>          <span class="hljs-keyword">return</span> ;<br>      <span class="hljs-keyword">int</span> key = a[start];<br>      <span class="hljs-keyword">int</span> i = start;<br>      <span class="hljs-keyword">int</span> j = end;<br>      <span class="hljs-keyword">while</span>(i &lt; j) &#123;<br>          <span class="hljs-keyword">while</span>(a[j] &gt;= key &amp;&amp; i &lt; j)&#123;<br>              j--;<br>          &#125;<br>          <span class="hljs-keyword">while</span>(a[i] &lt;= key &amp;&amp; i &lt; j)&#123;<br>              i++;<br>          &#125;<br>          <span class="hljs-keyword">if</span>(i &lt; j) &#123;<br>              a[i] ^= a[j];<br>              a[j] ^= a[i];<br>              a[i] ^= a[j];<br>          &#125;<br>      &#125;<br>      a[start] = a[i];<br>      a[i] = key;<br>      quickSort(a, start, i - <span class="hljs-number">1</span>);<br>      quickSort(a, i + <span class="hljs-number">1</span>, end);<br>  &#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p> 但你应该可以看出，快速排序不是稳定的，并且算法上复杂一点。</p>
+</blockquote>
+<blockquote>
+<p> 接下来look下插入排序。</p>
+</blockquote>
+<blockquote>
+<p>原理呢，也很简单，首先把需要排序的数组看成一个有序表和一个无序表。比如：</p>
+</blockquote>
+<blockquote>
+<p>数组a = {10，2，8，6，13，57，22，19，4}</p>
+</blockquote>
+<blockquote>
+<p>先把10这一个元素看成是有序表，2到后边的4堪称无序表。</p>
+</blockquote>
+<blockquote>
+<p>我们每次从无序表中取一个元素放到有序表去排序，知道排完。</p>
+</blockquote>
+<blockquote>
+<p>核心代码如下：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//从第二个开始排，所以i = 1,注意这里**不能length - 1**</span><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; a.length; i++) &#123;<br>     <span class="hljs-comment">//从右向左去比较，如果小于前面的就交换，类似冒泡排序哈</span><br>     <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j = i - <span class="hljs-number">1</span>; j &gt;= <span class="hljs-number">0</span>; j--) &#123;<br>         <span class="hljs-keyword">if</span>(a[j] &gt; a[j + <span class="hljs-number">1</span>]) &#123;<br>             a[j] ^= a[j+<span class="hljs-number">1</span>];<br>             a[j+<span class="hljs-number">1</span>] ^= a[j];<br>             a[j] ^= a[j+<span class="hljs-number">1</span>];<br>         &#125;<br>     &#125;<br> &#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>测试五组数据，花费时间如下： 180ms， 185ms，165ms，181ms，168ms</p>
+</blockquote>
+<blockquote>
+<p>效率比冒泡快一点。同时它是稳定的。</p>
+</blockquote>
+<blockquote>
+<p>继续。looklook归并排序。</p>
+</blockquote>
+<blockquote>
+<p> 归并排序基于分治法 。别问我，我也不知道啥是分治法。</p>
+</blockquote>
+<blockquote>
+<p> 原理就是一直划分一直划分，划分出很多个小序列，各自排序，然后再合并排序。</p>
+</blockquote>
+<blockquote>
+<p> 举个栗子</p>
+</blockquote>
+<blockquote>
+<p>原数组 ：        6   3    5    8    1    7    2    4</p>
+</blockquote>
+<blockquote>
+<p>第一次划分：  6    3    5    8   |   1    7    2    4  </p>
+</blockquote>
+<blockquote>
+<p>第二次划分：  6    3   |   5    8   |   1    7   |   2    4</p>
+</blockquote>
+<blockquote>
+<p>第三次划分：  6  |  3   |   5   |   8   |   1   |   7   |   2   |   4</p>
+</blockquote>
+<blockquote>
+<p>划分到第三次发现所有的小序列都是有序的了。接下来慢慢合并小序列。</p>
+</blockquote>
+<blockquote>
+<p>第一次合并： 3    6   |   5   |   8   |   1   |   7   |   2   |   4    //这里只把第一个和第二个排了序。</p>
+</blockquote>
+<blockquote>
+<p>第二次合并： 3    6   |   5    8   |   1   |   7   |   2   |   4   //只把第三个和第四个排了序。</p>
+</blockquote>
+<blockquote>
+<p>第三次合并： 3    5    6    8   |   1   |   7   |   2   |   4      //前面四个排序完成，后面四个亦是如此</p>
+</blockquote>
+<blockquote>
+<p>我们细说下第三次合并是什么回事。</p>
+</blockquote>
+<blockquote>
+<p> 在第二次合并的时候，3和6是一组，5和8是一组，首先去第一组的第一个和第二组的第一个比较将最小的结果放在新的数组中，这里最小的就是3，放到新数组的的第一个，接下来比较第一组的第二个和第二组的第一个比较，也就是6和5比较，最小的是5，把5放到新数组的第二个位置，再把第一组的第二个和第二组的第二个比较，依次进行直到合并完成。</p>
+</blockquote>
+<blockquote>
+<p>直接分析代码吧。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//这个方法需要传三个参数，a为需要排序的数组，start是需要排序的初始位置，end是需要排序的终止位置。</span><br><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">mergeSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] a, <span class="hljs-keyword">int</span> start, <span class="hljs-keyword">int</span> end)</span></span>&#123;<br>        <span class="hljs-comment">//先判断是否有需要排序的元素</span><br>        <span class="hljs-keyword">if</span>(start == end)<br>            <span class="hljs-keyword">return</span>;<br>        <span class="hljs-comment">//找到整个区间的最中间的下标值。</span><br>        <span class="hljs-keyword">int</span> middle = start + ((end - start) &gt;&gt; <span class="hljs-number">1</span>);<br>        <span class="hljs-comment">//对划分的左部分递归</span><br>        mergeSort(a, start, middle);<br>        <span class="hljs-comment">//对划分的右部分递归</span><br>        mergeSort(a, middle+<span class="hljs-number">1</span>, end);<br>        <span class="hljs-comment">//真正在排序的方法</span><br>        merge(a, start, middle, end);<br>    &#125;<br><br>    <span class="hljs-comment">//这个方法在执行排序功能 ，middle为start和end最中间的下标值</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">merge</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] a, <span class="hljs-keyword">int</span> start, <span class="hljs-keyword">int</span> middle, <span class="hljs-keyword">int</span> end)</span> </span>&#123;<br>        <span class="hljs-comment">//初始化一个用于存放排序后元素的数组</span><br>        <span class="hljs-keyword">int</span>[] temp = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[end - start + <span class="hljs-number">1</span>];<br>        <span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>;<br>        <span class="hljs-comment">//左部分第一个值的下标</span><br>        <span class="hljs-keyword">int</span> p1 = start;<br>        <span class="hljs-comment">//右部分第一个值的下标</span><br>        <span class="hljs-keyword">int</span> p2 = middle + <span class="hljs-number">1</span>;<br>        <span class="hljs-comment">//当p1和p2在有效范围内，选择最小的值放在新数组中</span><br>        <span class="hljs-keyword">while</span> (p1 &lt;= middle &amp;&amp; p2 &lt;= end) &#123;<br>            temp[i++] = a[p1] &lt; a[p2] ? a[p1++] : a[p2++];<br>        &#125;<br>        <span class="hljs-comment">//下面两个while循环只会执行一个（左部分和右部分只有一个会剩下元素）</span><br>        <span class="hljs-comment">//这个循环将左部分剩下的元素加入新数组</span><br>        <span class="hljs-keyword">while</span> (p1 &lt;= middle)<br>            temp[i++] = a[p1++];<br>       <span class="hljs-comment">//这个循环将右部分剩下的元素加入新数组</span><br>        <span class="hljs-keyword">while</span> (p2 &lt;= end)<br>            temp[i++] = a[p2++];<br><br>        <span class="hljs-comment">//将新数组中排好序的数组复制到原数组</span><br>        <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; temp.length; i++)<br>            a[start +i] = temp[i];<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>老规矩，测试五组数据；时间如下：5ms 5ms 5ms 5ms 5ms</p>
+</blockquote>
+<blockquote>
+<p>归并排序在数据量很大时，效率高于快速排序。归并排序是稳定的。归并排序会产生辅助数组，会消耗更多内存。</p>
+</blockquote>
+<h1 id="jdk为我们提供两个方法用于排序，一个是Arrays下的sort方法，另一个是Collections下的sort方法（灰常好使）。"><a href="#jdk为我们提供两个方法用于排序，一个是Arrays下的sort方法，另一个是Collections下的sort方法（灰常好使）。" class="headerlink" title="jdk为我们提供两个方法用于排序，一个是Arrays下的sort方法，另一个是Collections下的sort方法（灰常好使）。"></a>jdk为我们提供两个方法用于排序，一个是Arrays下的sort方法，另一个是Collections下的sort方法（灰常好使）。</h1><blockquote>
+<p> Arrasy.sort()方法支持传入int[]，byte[]，short[]，long[]，float[]，double[]，char[]，Object[]，T<a href="泛型"></a>；Collections.sort只能传入List<T>；</p>
+</blockquote>
+<blockquote>
+<p>这里我们重点说Arrays.sort()。</p>
+</blockquote>
+<blockquote>
+<p>点进去发现如下：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sort</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] a)</span> </span>&#123;<br>     DualPivotQuicksort.sort(a, <span class="hljs-number">0</span>, a.length - <span class="hljs-number">1</span>, <span class="hljs-keyword">null</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br> &#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>继续往里面进。</p>
+</blockquote>
+<blockquote>
+<p>稍有点长，怕吓着各位，先不粘贴源码。且听我分析。</p>
+</blockquote>
+<blockquote>
+<p>先看第一步</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"> <span class="hljs-comment">//right - left代表整个数组的长度 ，QUICKSORT_THRESHOLD 为一个int值 286</span><br><span class="hljs-keyword">if</span> (right - left &lt; QUICKSORT_THRESHOLD) &#123;<br>      sort(a, left, right, <span class="hljs-keyword">true</span>);<br>      <span class="hljs-keyword">return</span>;<br>  &#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>就是说当需要排序的数组长度小于286就调用sort这个方法。</p>
+</blockquote>
+<blockquote>
+<p>我们这里先往下看大于286的情况,等下后边再看sort这个方法。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// Check if the array is nearly sorted</span><br> <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> k = left; k &lt; right; run[count] = k) &#123;<br>     <span class="hljs-keyword">if</span> (a[k] &lt; a[k + <span class="hljs-number">1</span>]) &#123; <span class="hljs-comment">// ascending</span><br>         <span class="hljs-keyword">while</span> (++k &lt;= right &amp;&amp; a[k - <span class="hljs-number">1</span>] &lt;= a[k]);<br>     &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (a[k] &gt; a[k + <span class="hljs-number">1</span>]) &#123; <span class="hljs-comment">// descending</span><br>         <span class="hljs-keyword">while</span> (++k &lt;= right &amp;&amp; a[k - <span class="hljs-number">1</span>] &gt;= a[k]);<br>         <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> lo = run[count] - <span class="hljs-number">1</span>, hi = k; ++lo &lt; --hi; ) &#123;<br>             <span class="hljs-keyword">int</span> t = a[lo]; a[lo] = a[hi]; a[hi] = t;<br>         &#125;<br>     &#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// equal</span><br>         <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> m = MAX_RUN_LENGTH; ++k &lt;= right &amp;&amp; a[k - <span class="hljs-number">1</span>] == a[k]; ) &#123;<br>             <span class="hljs-keyword">if</span> (--m == <span class="hljs-number">0</span>) &#123;<br>                 sort(a, left, right, <span class="hljs-keyword">true</span>);<br>                 <span class="hljs-keyword">return</span>;<br>             &#125;<br>         &#125;<br>     &#125;<br><br>     <span class="hljs-comment">//MAX_RUN_COUNT = 67</span><br>     <span class="hljs-keyword">if</span> (++count == MAX_RUN_COUNT) &#123;<br>         sort(a, left, right, <span class="hljs-keyword">true</span>);<br>         <span class="hljs-keyword">return</span>;<br>     &#125;<br> &#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p> 这段代码在判断数组是否具备结构，实际逻辑是分组排序，每降序为一个组，像1,9,8,7,6,8。9到6是降序，为一个组，然后把降序的一组排成升序：1,6,7,8,9,8。然后最后的8后面继续往后面找。。。</p>
+</blockquote>
+<p>每遇到这样一个降序组，++count，当count大于MAX_RUN_COUNT（67），被判断为这个数组不具备结构（也就是这数据时而升时而降），和之前小于286一样，调用了sort方法。</p>
+<blockquote>
+<p>这里我们先继续看小于67的情况。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-comment">// Check special cases</span><br>        <span class="hljs-comment">// Implementation note: variable "right" is increased by 1.</span><br>        <span class="hljs-keyword">if</span> (run[count] == right++) &#123; <span class="hljs-comment">// The last run contains one element</span><br>            run[++count] = right;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (count == <span class="hljs-number">1</span>) &#123; <span class="hljs-comment">// The array is already sorted</span><br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br><br>        <span class="hljs-comment">// Determine alternation base for merge</span><br>        <span class="hljs-keyword">byte</span> odd = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> n = <span class="hljs-number">1</span>; (n &lt;&lt;= <span class="hljs-number">1</span>) &lt; count; odd ^= <span class="hljs-number">1</span>);<br><br>        <span class="hljs-comment">// Use or create temporary array b for merging</span><br>        <span class="hljs-keyword">int</span>[] b;                 <span class="hljs-comment">// temp array; alternates with a</span><br>        <span class="hljs-keyword">int</span> ao, bo;              <span class="hljs-comment">// array offsets from 'left'</span><br>        <span class="hljs-keyword">int</span> blen = right - left; <span class="hljs-comment">// space needed for b</span><br>        <span class="hljs-keyword">if</span> (work == <span class="hljs-keyword">null</span> || workLen &lt; blen || workBase + blen &gt; work.length) &#123;<br>            work = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[blen];<br>            workBase = <span class="hljs-number">0</span>;<br>        &#125;<br>        <span class="hljs-keyword">if</span> (odd == <span class="hljs-number">0</span>) &#123;<br>            System.arraycopy(a, left, work, workBase, blen);<br>            b = a;<br>            bo = <span class="hljs-number">0</span>;<br>            a = work;<br>            ao = workBase - left;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            b = work;<br>            ao = <span class="hljs-number">0</span>;<br>            bo = workBase - left;<br>        &#125;<br><br>        <span class="hljs-comment">// Merging</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> last; count &gt; <span class="hljs-number">1</span>; count = last) &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> k = (last = <span class="hljs-number">0</span>) + <span class="hljs-number">2</span>; k &lt;= count; k += <span class="hljs-number">2</span>) &#123;<br>                <span class="hljs-keyword">int</span> hi = run[k], mi = run[k - <span class="hljs-number">1</span>];<br>                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = run[k - <span class="hljs-number">2</span>], p = i, q = mi; i &lt; hi; ++i) &#123;<br>                    <span class="hljs-keyword">if</span> (q &gt;= hi || p &lt; mi &amp;&amp; a[p + ao] &lt;= a[q + ao]) &#123;<br>                        b[i + bo] = a[p++ + ao];<br>                    &#125; <span class="hljs-keyword">else</span> &#123;<br>                        b[i + bo] = a[q++ + ao];<br>                    &#125;<br>                &#125;<br>                run[++last] = hi;<br>            &#125;<br>            <span class="hljs-keyword">if</span> ((count &amp; <span class="hljs-number">1</span>) != <span class="hljs-number">0</span>) &#123;<br>                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = right, lo = run[count - <span class="hljs-number">1</span>]; --i &gt;= lo;<br>                    b[i + bo] = a[i + ao]<br>                );<br>                run[++last] = right;<br>            &#125;<br>            <span class="hljs-keyword">int</span>[] t = a; a = b; b = t;<br>            <span class="hljs-keyword">int</span> o = ao; ao = bo; bo = o;<br>        &#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>大概通过注释能看出来是进行了归并排序。此处理解的比较模糊，后边有时间进行补全。</p>
+</blockquote>
+<blockquote>
+<p> 下面看看sort方法：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">int</span> length = right - left + <span class="hljs-number">1</span>;<br><br>        <span class="hljs-comment">// 先判断数组的长度是否小于INSERTION_SORT_THRESHOLD = 47</span><br>        <span class="hljs-keyword">if</span> (length &lt; INSERTION_SORT_THRESHOLD) &#123;<br>            <span class="hljs-keyword">if</span> (leftmost) &#123;        <span class="hljs-comment">//leftmost这个参数前面传进入就为true</span><br>                <span class="hljs-comment">//这里执行了插入排序</span><br>                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = left, j = i; i &lt; right; j = ++i) &#123;<br>                    <span class="hljs-keyword">int</span> ai = a[i + <span class="hljs-number">1</span>];<br>                    <span class="hljs-keyword">while</span> (ai &lt; a[j]) &#123;<br>                        a[j + <span class="hljs-number">1</span>] = a[j];<br>                        <span class="hljs-keyword">if</span> (j-- == left) &#123;<br>                            <span class="hljs-keyword">break</span>;<br>                        &#125;<br>                    &#125;<br>                    a[j + <span class="hljs-number">1</span>] = ai;<br>                &#125;<br>            &#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>数组长度大于47时代码有点多，不粘贴，大致说下；</p>
+</blockquote>
+<blockquote>
+<p>大于47时采用快速排序的方法：<br>1.从数列中挑出五个元素，称为 “基准”（pivot）；<br>2.重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区（partition）操作；<br>3.递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序。</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>Arrays.sort（）这个static方法针对 数组的特性采用了不同的排序方法。所以使用这个方法排序效率上可能会比我们自己去写排序算法高一点。</p>
+</blockquote>
+
+    </section>
+    <section class="extra">
+      
+      
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+      
+<nav class="nav">
+  
+  
+    <a href="/blog/2020/05/05/hello-world/">Hello World<i class="iconfont iconright"></i></a>
+  
+</nav>
+
+    </section>
+    
+      <section class="comments">
+        
+          <div class="btn" id="comments-btn">查看评论</div>
+        
+        
+      </section>
+    
+  </section>
+</article>
+  </div>
+</main>
+  <footer class="footer">
+  <div class="footer-social">
+    
+    
+    
+    
+    
+    <a href="tencent://message/?Menu=yes&uin=1286890175 " target="_blank" onMouseOver="this.style.color= '#12B7F5'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconQQ "></i>
+    </a>
+    
+    
+    
+    
+    
+    <a href="javascript:; " target="_blank" onMouseOver="this.style.color= '#09BB07'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconwechat-fill "></i>
+    </a>
+    
+    
+    
+    
+    
+    <a href="mailto:chenjunan_2018@163.com " target="_blank" onMouseOver="this.style.color='#FFBE5B'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconmail"></i>
+    </a>
+    
+  </div>
+  <div class="footer-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="http://junanaa.gitee.io/">一只小安仔</a> .AllRightsReserved</p></div>
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  <div class="fab fab-menu">
+    <i class="iconfont iconmenu"></i>
+  </div>
+  
+</body>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+
+<script src="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/justifiedGallery/3.7.0/js/jquery.justifiedGallery.min.js"></script>
+
+
+
+
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+<script>
+  (function () {
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    } else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</html>
