@@ -1,0 +1,454 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Java 开发区块链（2） - 一只小安仔</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+
+  
+  <meta name="keywords" content="一只小安仔,"> 
+  
+  <meta name="description" content="Java 开发区块链（2）这一节开始讲解交易类的设计。..."> 
+  
+  <meta name="author" content="junan"> 
+
+  
+    <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  
+  
+    <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  
+  
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  
+  
+    <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_58xq2j9v1id.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xcode.min.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/justifiedGallery/3.7.0/css/justifiedGallery.min.css">
+
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {}
+    CONFIG = {
+      fancybox: true,
+      pjax: false,
+      lazyload: {
+        enable: true,
+        loadingImage: '/images/theme/loading.gif',
+      },
+      donate_alipay: '',
+      donate_wechat: '',
+      motto: {
+        api: '',
+        default: '夜半花落听雨声，不自欢喜不自愁。'
+      },
+      galleries: {
+        enable: 'true'
+      },
+      fab: {
+        enable: 'true',
+        alwaysShow: 'false'
+      }
+    }
+  </script>
+
+  
+
+  
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body class="lock-screen">
+  <div class="loading"></div>
+  <nav class="menu">
+  <div class="menu-close">
+    <i class="iconfont iconplus"></i>
+  </div>
+  <ul class="menu-content">
+    
+    
+    
+    
+    <li class="menu-item"><a href="/ "> 首页</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/archives "> 归档</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/tags "> 标签</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/categories "> 分类</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/about "> 关于</a></li>
+    
+  </ul>
+  <div class="menu-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="http://junanaa.gitee.io/">一只小安仔</a> .AllRightsReserved</p></div>
+</nav>
+  <main id="main">
+  <div class="container" id="container">
+    <article class="article">
+  <section class="head">
+  <img   class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g5/M00/0E/09/ChMkJ1wsl26IUnDPAARSDGXMnIIAAuIUABYjoYABFIk872.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">Java 开发区块链（2）</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>2020-05-05</span
+        class="post-info-item">
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>18402</span>
+    </div>
+  </div>
+</section>
+  <section class="main">
+    <section class="content">
+      <h1 id="Java-开发区块链（2）"><a href="#Java-开发区块链（2）" class="headerlink" title="Java 开发区块链（2）"></a>Java 开发区块链（2）</h1><h1 id="这一节开始讲解交易类的设计。"><a href="#这一节开始讲解交易类的设计。" class="headerlink" title="这一节开始讲解交易类的设计。"></a>这一节开始讲解交易类的设计。</h1><blockquote>
+<p>每笔交易我们且给它生成一个hash值。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//交易hash</span><br><span class="hljs-keyword">private</span> String transactionHash;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>交易的发起者。不必介意PublicKey是什么，后面讲钱包会说。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//发送者</span><br><span class="hljs-keyword">private</span> PublicKey sender;        <span class="hljs-comment">//发起者的公钥</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>交易的接受者。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//接受者</span><br><span class="hljs-keyword">private</span> PublicKey recipient;     <span class="hljs-comment">//接受者的公钥</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>交易的金额。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//交易金额</span><br><span class="hljs-keyword">private</span> BigDecimal amount;        <span class="hljs-comment">//为了保证金额精确计算使用 BigDecimal ，而不用 float 和 double</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>sequence 用于记录这是第几个交易，相当于对总共交易的计数。注意它是 static 的，不属于某个交易对象。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//多少个交易已经被创建</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> sequence = <span class="hljs-number">0</span>;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>交易的输入列表。TransactionInput 表示交易的输入，即你发起交易的金额的来源，后面会对此类解释。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//输入列表</span><br><span class="hljs-keyword">private</span> List&lt;TransactionInput&gt; inputs = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>交易的输出列表。TransactionOutput 表示交易的输出，即交易金额的流向，后面对此类解释。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//输出列表</span><br><span class="hljs-keyword">private</span> List&lt;TransactionOutput&gt; outputs = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>交易签名，确保是本人发起交易。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//数字签名，防止其他人从我们的钱包中发送资金</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">byte</span>[] signature;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>UTXOs : 未使用的交易输出集合。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//未使用的输出集合</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Map&lt;String, TransactionOutput&gt; UTXOs = <span class="hljs-keyword">new</span> HashMap&lt;&gt;();<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>我需要对此进行说明。区块链<strong>没有</strong>专门的关系型数据库（如 mysql ）来保存每个人的账户余额。每个人的余额只能通过这个 UTXOs 来查询。这里面保存着所有的交易的钱的流向。通俗的说就是，你有多少钱可以通过查询有多少人转了你钱。TransactionOutput 这个对象保存着每笔交易的输出位置（收款人）。下面自己画的图，希望你能看懂。<br><img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/3375857744.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="输入输出"></p>
+</blockquote>
+<blockquote>
+<p>构造方法：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Transaction</span><span class="hljs-params">()</span> </span>&#123;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Transaction</span><span class="hljs-params">(PublicKey from, PublicKey to, BigDecimal amount, List&lt;TransactionInput&gt; inputs)</span> </span>&#123;<br>    <span class="hljs-keyword">this</span>.sender = from;<br>    <span class="hljs-keyword">this</span>.recipient = to;<br>    <span class="hljs-keyword">this</span>.amount = amount;<br>    <span class="hljs-keyword">this</span>.inputs = inputs;<br>    transactionHash = calculateHash();        <span class="hljs-comment">//calculateHash()方法用于计算 hash</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>计算 hash 的方法。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//计算交易hash</span><br><span class="hljs-function"><span class="hljs-keyword">private</span> String <span class="hljs-title">calculateHash</span><span class="hljs-params">()</span> </span>&#123;<br>    sequence++;                  <span class="hljs-comment">//增加 sequence ，用来防治两个不同的交易有相同的hash值</span><br>    <span class="hljs-keyword">return</span> EncryptUtil.getSHA256(<br>            EncryptUtil.getStringFromKey(sender) +<br>                    recipient +<br>                    amount + sequence                 <span class="hljs-comment">// hash 值受发送者，接受者，金额，sequence 影响</span><br>    );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>交易签名。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//签名所有我们不想被篡改的数据（通过**私钥**进行签名）</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">generateSignature</span><span class="hljs-params">(PrivateKey privateKey)</span> </span>&#123;<br>    String data = EncryptUtil.getStringFromKey(sender) + EncryptUtil.getStringFromKey(recipient) + amount;<br>    signature = EncryptUtil.applyECDSASig(privateKey, data);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>验证签名。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//验证我们已签名的数据没有被窜给过（通过发送者**公钥**验证签名）</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">verifySignature</span><span class="hljs-params">()</span> </span>&#123;<br>    String data = EncryptUtil.getStringFromKey(sender) + EncryptUtil.getStringFromKey(recipient) + amount;<br>    <span class="hljs-keyword">return</span> EncryptUtil.verifyECDSASig(sender, data, signature);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>处理交易的方法。次方法主要进行交易后的输入输出处理。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 处理交易</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">processTransaction</span><span class="hljs-params">()</span> </span>&#123;<br><br>    <span class="hljs-comment">// 验证签名</span><br>    <span class="hljs-keyword">if</span>(verifySignature() == <span class="hljs-keyword">false</span>) &#123;<br>        System.out.println(<span class="hljs-string">"交易签名验证失败！"</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// 收集交易的输入（必须注意的是**输入是未被使用的**）</span><br>    <span class="hljs-keyword">for</span>(TransactionInput i : inputs) &#123;<br>        i.UTXO = Transaction.UTXOs.get(i.transactionOutputId);<br>    &#125;<br><br>    <span class="hljs-comment">//创建交易输出</span><br>    BigDecimal leftOver = getInputsValue().subtract(amount);                      <span class="hljs-comment">// 获得输入的剩余金额</span><br>    transactionHash = calculateHash();                                            <span class="hljs-comment">// 计算 hash</span><br>    outputs.add(<span class="hljs-keyword">new</span> TransactionOutput( <span class="hljs-keyword">this</span>.recipient, amount, transactionHash));  <span class="hljs-comment">// 发送金额给收款人</span><br>    outputs.add(<span class="hljs-keyword">new</span> TransactionOutput( <span class="hljs-keyword">this</span>.sender, leftOver, transactionHash));   <span class="hljs-comment">// 把剩余金额返回给付款人</span><br><br>    <span class="hljs-comment">// 把输出增加到未使用的列表中</span><br>    <span class="hljs-keyword">for</span>(TransactionOutput o : outputs) &#123;<br>        Transaction.UTXOs.put(o.transactionOutputId , o);<br>    &#125;<br><br>    <span class="hljs-comment">// 把已经使用的交易的输入从UTXO中移除</span><br>    <span class="hljs-keyword">for</span>(TransactionInput i : inputs) &#123;<br>        <span class="hljs-keyword">if</span>(i.UTXO == <span class="hljs-keyword">null</span>) <span class="hljs-keyword">continue</span>;                    <span class="hljs-comment">// 如果交易不存在忽略它</span><br>        Transaction.UTXOs.remove(i.UTXO.transactionOutputId);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>这里我感觉你可能会疑惑，为何不先判断交易发起人的余额是否足够就开始加减。其实这一步的判断放在钱包中的，想发起交易得从钱包里进行，判断自然也在钱包。如果你想更加安全些，这里也可以加一卜判断。</p>
+</blockquote>
+<blockquote>
+<p>需要计算所有交易的输入金额。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//返回余额</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> BigDecimal <span class="hljs-title">getInputsValue</span><span class="hljs-params">()</span> </span>&#123;<br>    BigDecimal total = <span class="hljs-keyword">new</span> BigDecimal(<span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">for</span>(TransactionInput i : inputs) &#123;<br>        <span class="hljs-keyword">if</span>(i.UTXO == <span class="hljs-keyword">null</span>) <span class="hljs-keyword">continue</span>;                    <span class="hljs-comment">//如果交易不存在忽略它</span><br>        total = total.add(i.UTXO.amount);<br>    &#125;<br>    <span class="hljs-keyword">return</span> total;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>计算交易的输出金额。一般交易的输入金额总和和交易的输出金额总和相等。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//返回输出的总和</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> BigDecimal <span class="hljs-title">getOutputsValue</span><span class="hljs-params">()</span> </span>&#123;<br>    BigDecimal total = <span class="hljs-keyword">new</span> BigDecimal(<span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">for</span>(TransactionOutput o : outputs) &#123;<br>        total = total.add(o.amount);<br>    &#125;<br>    <span class="hljs-keyword">return</span> total;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>交易类基本就写完了，以下是完整版。包含 setter 和 getter 。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> junan</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@version</span> V1.0</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@className</span> Transaction</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@disc</span> 交易类封装</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@date</span> 2019/9/18 11:27</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Transaction</span> </span>&#123;<br><br>    <span class="hljs-comment">//交易hash</span><br>    <span class="hljs-keyword">private</span> String transactionHash;<br>    <span class="hljs-comment">//发送者</span><br>    <span class="hljs-keyword">private</span> PublicKey sender;<br>    <span class="hljs-comment">//接受者</span><br>    <span class="hljs-keyword">private</span> PublicKey recipient;<br>    <span class="hljs-comment">//交易金额</span><br>    <span class="hljs-keyword">private</span> BigDecimal amount;<br>    <span class="hljs-comment">//多少个交易已经被创建</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> sequence = <span class="hljs-number">0</span>;<br>    <span class="hljs-comment">//输入列表</span><br>    <span class="hljs-keyword">private</span> List&lt;TransactionInput&gt; inputs = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br>    <span class="hljs-comment">//输出列表</span><br>    <span class="hljs-keyword">private</span> List&lt;TransactionOutput&gt; outputs = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br>    <span class="hljs-comment">//数字签名，防止其他人从我们的钱包中发送资金</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">byte</span>[] signature;<br>    <span class="hljs-comment">//未使用的输出集合</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Map&lt;String, TransactionOutput&gt; UTXOs = <span class="hljs-keyword">new</span> HashMap&lt;&gt;();<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Transaction</span><span class="hljs-params">()</span> </span>&#123;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Transaction</span><span class="hljs-params">(PublicKey from, PublicKey to, BigDecimal amount, List&lt;TransactionInput&gt; inputs)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.sender = from;<br>        <span class="hljs-keyword">this</span>.recipient = to;<br>        <span class="hljs-keyword">this</span>.amount = amount;<br>        <span class="hljs-keyword">this</span>.inputs = inputs;<br>        transactionHash = calculateHash();<br>    &#125;<br><br>    <span class="hljs-comment">//计算交易hash</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> String <span class="hljs-title">calculateHash</span><span class="hljs-params">()</span> </span>&#123;<br>        sequence++; <span class="hljs-comment">//增加sequence，用来防治两个不同的交易有相同的hash值</span><br>        <span class="hljs-keyword">return</span> EncryptUtil.getSHA256(<br>                EncryptUtil.getStringFromKey(sender) +<br>                        recipient +<br>                        amount + sequence<br>        );<br>    &#125;<br><br>    <span class="hljs-comment">//签名所有我们不想被篡改的数据</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">generateSignature</span><span class="hljs-params">(PrivateKey privateKey)</span> </span>&#123;<br>        String data = EncryptUtil.getStringFromKey(sender) + EncryptUtil.getStringFromKey(recipient) + amount;<br>        signature = EncryptUtil.applyECDSASig(privateKey, data);<br>    &#125;<br><br>    <span class="hljs-comment">//验证我们已签名的数据没有被窜给过</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">verifySignature</span><span class="hljs-params">()</span> </span>&#123;<br>        String data = EncryptUtil.getStringFromKey(sender) + EncryptUtil.getStringFromKey(recipient) + amount;<br>        <span class="hljs-keyword">return</span> EncryptUtil.verifyECDSASig(sender, data, signature);<br>    &#125;<br><br>    <span class="hljs-comment">// 处理交易</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">processTransaction</span><span class="hljs-params">()</span> </span>&#123;<br><br>        <span class="hljs-comment">//验证签名</span><br>        <span class="hljs-keyword">if</span>(verifySignature() == <span class="hljs-keyword">false</span>) &#123;<br>            System.out.println(<span class="hljs-string">"交易签名验证失败！"</span>);<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>        &#125;<br><br>        <span class="hljs-comment">//收集交易的输入（必须注意的是输入是未被使用的）</span><br>        <span class="hljs-keyword">for</span>(TransactionInput i : inputs) &#123;<br>            i.UTXO = Transaction.UTXOs.get(i.transactionOutputId);<br>        &#125;<br><br>        <span class="hljs-comment">//创建交易输出</span><br>        BigDecimal leftOver = getInputsValue().subtract(amount);                      <span class="hljs-comment">// 获得输入的剩余金额</span><br>        transactionHash = calculateHash();                                            <span class="hljs-comment">// 计算 hash</span><br>        outputs.add(<span class="hljs-keyword">new</span> TransactionOutput( <span class="hljs-keyword">this</span>.recipient, amount, transactionHash));  <span class="hljs-comment">// 发送金额给收款人</span><br>        outputs.add(<span class="hljs-keyword">new</span> TransactionOutput( <span class="hljs-keyword">this</span>.sender, leftOver, transactionHash));   <span class="hljs-comment">// 把剩余金额返回给付款人</span><br><br>        <span class="hljs-comment">//把输出增加到未使用的列表中</span><br>        <span class="hljs-keyword">for</span>(TransactionOutput o : outputs) &#123;<br>            Transaction.UTXOs.put(o.transactionOutputId , o);<br>        &#125;<br><br>        <span class="hljs-comment">//把已经使用的交易的输入从UTXO中移除</span><br>        <span class="hljs-keyword">for</span>(TransactionInput i : inputs) &#123;<br>            <span class="hljs-keyword">if</span>(i.UTXO == <span class="hljs-keyword">null</span>) <span class="hljs-keyword">continue</span>;                    <span class="hljs-comment">//如果交易不存在忽略它</span><br>            Transaction.UTXOs.remove(i.UTXO.transactionOutputId);<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br>    &#125;<br><br>    <span class="hljs-comment">//返回余额</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> BigDecimal <span class="hljs-title">getInputsValue</span><span class="hljs-params">()</span> </span>&#123;<br>        BigDecimal total = <span class="hljs-keyword">new</span> BigDecimal(<span class="hljs-number">0</span>);<br>        <span class="hljs-keyword">for</span>(TransactionInput i : inputs) &#123;<br>            <span class="hljs-keyword">if</span>(i.UTXO == <span class="hljs-keyword">null</span>) <span class="hljs-keyword">continue</span>;                    <span class="hljs-comment">//如果交易不存在忽略它</span><br>            total = total.add(i.UTXO.amount);<br>        &#125;<br>        <span class="hljs-keyword">return</span> total;<br>    &#125;<br><br>    <span class="hljs-comment">//返回输出的总和</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> BigDecimal <span class="hljs-title">getOutputsValue</span><span class="hljs-params">()</span> </span>&#123;<br>        BigDecimal total = <span class="hljs-keyword">new</span> BigDecimal(<span class="hljs-number">0</span>);<br>        <span class="hljs-keyword">for</span>(TransactionOutput o : outputs) &#123;<br>            total = total.add(o.amount);<br>        &#125;<br>        <span class="hljs-keyword">return</span> total;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getTransactionHash</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> transactionHash;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setTransactionHash</span><span class="hljs-params">(String transactionHash)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.transactionHash = transactionHash;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> PublicKey <span class="hljs-title">getSender</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> sender;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setSender</span><span class="hljs-params">(PublicKey sender)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.sender = sender;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> PublicKey <span class="hljs-title">getRecipient</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> recipient;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setRecipient</span><span class="hljs-params">(PublicKey recipient)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.recipient = recipient;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> BigDecimal <span class="hljs-title">getAmount</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> amount;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setAmount</span><span class="hljs-params">(BigDecimal amount)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.amount = amount;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getSequence</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> sequence;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setSequence</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sequence)</span> </span>&#123;<br>        Transaction.sequence = sequence;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> List&lt;TransactionInput&gt; <span class="hljs-title">getInputs</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> inputs;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setInputs</span><span class="hljs-params">(List&lt;TransactionInput&gt; inputs)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.inputs = inputs;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> List&lt;TransactionOutput&gt; <span class="hljs-title">getOutputs</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> outputs;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setOutputs</span><span class="hljs-params">(List&lt;TransactionOutput&gt; outputs)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.outputs = outputs;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">byte</span>[] getSignature() &#123;<br>        <span class="hljs-keyword">return</span> signature;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setSignature</span><span class="hljs-params">(<span class="hljs-keyword">byte</span>[] signature)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.signature = signature;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toString</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">"Transaction&#123;"</span> +<br>                <span class="hljs-string">"transactionHash='"</span> + transactionHash + <span class="hljs-string">'\''</span> +<br>                <span class="hljs-string">", sender="</span> + sender +<br>                <span class="hljs-string">", recipient="</span> + recipient +<br>                <span class="hljs-string">", amount="</span> + amount +<br>                <span class="hljs-string">", inputs="</span> + inputs +<br>                <span class="hljs-string">", outputs="</span> + outputs +<br>                <span class="hljs-string">'&#125;'</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="接下来说说钱包的设计。"><a href="#接下来说说钱包的设计。" class="headerlink" title="接下来说说钱包的设计。"></a>接下来说说钱包的设计。</h1><blockquote>
+<p>前面说过了些，钱包需要有公钥和私钥，公钥用于验证签名，私钥用于签名。签名只能账户本人签，所以私钥要好好保管。公钥用于别人对你发起的交易的验证和和别人给你转钱用。</p>
+</blockquote>
+<blockquote>
+<p>对于钱包的设计，我们需要先说公钥私钥产生是办法了，本次我们使用到了bc，对于算法这块，我不是特别理解，抽时间研究下再写篇博客。你写个测试类，测试如下代码：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test2</span><span class="hljs-params">()</span> </span>&#123;<br>    Provider[] providers = Security.getProviders();<br>    <span class="hljs-keyword">for</span> (Provider provider : providers) &#123;<br>        System.out.println(provider.getName() + <span class="hljs-string">"  "</span> + provider.getVersion());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>出现如下：<br><img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/1077503497.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="provider"><br>你的可能没有最后一个BC，那么你需要手动导入它的jar，如果你和我一样使用maven构建项目，那么导入如下依赖便可以了。如果不是maven项目的话，请自行到<a href="https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15/1.46" target="_blank" rel="noopener">maven仓库</a>下载jar包导入项目即可。</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.bouncycastle<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>bcprov-ext-jdk16<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.46<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">type</span>&gt;</span>jar<span class="hljs-tag">&lt;/<span class="hljs-name">type</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>这时候你需要在你的钱包类中加入如下代码向Security注册才能真正使用。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">static</span> &#123;<br>    Security.addProvider(<span class="hljs-keyword">new</span> BouncyCastleProvider());       <span class="hljs-comment">// static， 注册一次即可</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>公钥私钥字段。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//公钥</span><br><span class="hljs-keyword">private</span> PublicKey publicKey;<br><br><span class="hljs-comment">//私钥</span><br><span class="hljs-keyword">private</span> PrivateKey privateKey;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>钱包自身的未使用的输出。如果每次去遍历全局的UTXO，影响效率，这里只保存自己的。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//钱包自身的UTXO(钱包自身的未使用的输出)</span><br><span class="hljs-keyword">public</span> Map&lt;String,TransactionOutput&gt; UTXOs = <span class="hljs-keyword">new</span> HashMap&lt;&gt;();<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>创建公钥私钥的方法。不必太过关心算法底层实现。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//创建公钥私钥</span><br><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">createKeyPair</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">try</span> &#123;<br>        KeyPairGenerator keyGen = KeyPairGenerator.getInstance(<span class="hljs-string">"ECDSA"</span>,<span class="hljs-string">"BC"</span>);<br>        SecureRandom random = SecureRandom.getInstance(<span class="hljs-string">"SHA1PRNG"</span>);<br>        ECGenParameterSpec ecSpec = <span class="hljs-keyword">new</span> ECGenParameterSpec(<span class="hljs-string">"prime192v1"</span>);<br>        keyGen.initialize(ecSpec, random);<br>        KeyPair keyPair = keyGen.generateKeyPair();<br>        privateKey = keyPair.getPrivate();<br>        publicKey = keyPair.getPublic();<br>    &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>        e.printStackTrace();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>查询属于当前用户的输出和计算余额。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//返回余额并保存钱包自身的UTXO</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> BigDecimal <span class="hljs-title">getBalance</span><span class="hljs-params">()</span> </span>&#123;<br>    BigDecimal total = <span class="hljs-keyword">new</span> BigDecimal(<span class="hljs-number">0</span>);<br>    <span class="hljs-comment">// 遍历全局的 UTXOs 找出属于我的输出，并计算余额</span><br>    <span class="hljs-keyword">for</span> (Map.Entry&lt;String, TransactionOutput&gt; item : Transaction.UTXOs.entrySet()) &#123;<br>        TransactionOutput UTXO = item.getValue();<br>        <span class="hljs-keyword">if</span> (UTXO.isMine(publicKey)) &#123;                                                <span class="hljs-comment">// 查看输出是否属于我即货币是不是我的</span><br>            UTXOs.put(UTXO.transactionOutputId, UTXO);                               <span class="hljs-comment">// 添加到未使用的交易列表中</span><br>            total = total.add(UTXO.amount);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> total;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>由钱包创建一个新的交易。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//创建并返回属于这个钱包的一个新交易</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> Transaction <span class="hljs-title">createTransaction</span><span class="hljs-params">(PublicKey _recipient, BigDecimal value)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (getBalance().compareTo(value) == -<span class="hljs-number">1</span>) &#123;                                       <span class="hljs-comment">//搜集余额并检查金额，这里判断了余额够不够，所以交易类中不再判断</span><br>        System.out.println(<span class="hljs-string">"余额不足，创建交易失败！"</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>    &#125;<br><br>    <span class="hljs-comment">//创建输入列表</span><br>    List&lt;TransactionInput&gt; inputs = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br>    BigDecimal total = <span class="hljs-keyword">new</span> BigDecimal(<span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">for</span> (Map.Entry&lt;String, TransactionOutput&gt; item: UTXOs.entrySet())&#123;<br>        TransactionOutput UTXO = item.getValue();<br>        total = total.add(UTXO.amount);<br>        inputs.add(<span class="hljs-keyword">new</span> TransactionInput(UTXO.transactionOutputId));      <span class="hljs-comment">//把之前别人发给我的交易的输出作为本次交易的输入</span><br>        <span class="hljs-keyword">if</span>(total.compareTo(value) == <span class="hljs-number">1</span>) <span class="hljs-keyword">break</span>;<br>    &#125;<br>    Transaction newTransaction = <span class="hljs-keyword">new</span> Transaction(publicKey, _recipient , value, inputs);<br>    <span class="hljs-comment">//添加签名</span><br>    newTransaction.generateSignature(privateKey);<br>    <span class="hljs-comment">//移除了被使用的输出</span><br>    <span class="hljs-keyword">for</span>(TransactionInput input: inputs)&#123;<br>        UTXOs.remove(input.transactionOutputId);<br>    &#125;<br>    <span class="hljs-keyword">return</span> newTransaction;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>钱包类所有代码，包含 setter 和 getter 。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> junan</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@version</span> V1.0</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@className</span> Wallet</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@disc</span></span><br><span class="hljs-comment"> * <span class="hljs-doctag">@date</span> 2019/9/19 9:08</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Wallet</span> </span>&#123;<br><br>    <span class="hljs-keyword">static</span> &#123;<br>        Security.addProvider(<span class="hljs-keyword">new</span> BouncyCastleProvider());<br>    &#125;<br><br>    <span class="hljs-comment">//公钥</span><br>    <span class="hljs-keyword">private</span> PublicKey publicKey;<br><br>    <span class="hljs-comment">//私钥</span><br>    <span class="hljs-keyword">private</span> PrivateKey privateKey;<br><br>    <span class="hljs-comment">//钱包自身的UTXO(钱包自身的未使用的输出)</span><br>    <span class="hljs-keyword">public</span> Map&lt;String,TransactionOutput&gt; UTXOs = <span class="hljs-keyword">new</span> HashMap&lt;&gt;();<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Wallet</span><span class="hljs-params">()</span></span>&#123;<br>        createKeyPair();<br>    &#125;<br><br>    <span class="hljs-comment">//创建公钥私钥</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">createKeyPair</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(<span class="hljs-string">"ECDSA"</span>,<span class="hljs-string">"BC"</span>);<br>            SecureRandom random = SecureRandom.getInstance(<span class="hljs-string">"SHA1PRNG"</span>);<br>            ECGenParameterSpec ecSpec = <span class="hljs-keyword">new</span> ECGenParameterSpec(<span class="hljs-string">"prime192v1"</span>);<br>            keyGen.initialize(ecSpec, random);<br>            KeyPair keyPair = keyGen.generateKeyPair();<br>            privateKey = keyPair.getPrivate();<br>            publicKey = keyPair.getPublic();<br>        &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">//返回余额并保存钱包自身的UTXO</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> BigDecimal <span class="hljs-title">getBalance</span><span class="hljs-params">()</span> </span>&#123;<br>        BigDecimal total = <span class="hljs-keyword">new</span> BigDecimal(<span class="hljs-number">0</span>);<br>        <span class="hljs-comment">// 遍历全局的 UTXOs 找出属于我的输出，并计算余额</span><br>        <span class="hljs-keyword">for</span> (Map.Entry&lt;String, TransactionOutput&gt; item : Transaction.UTXOs.entrySet()) &#123;<br>            TransactionOutput UTXO = item.getValue();<br>            <span class="hljs-keyword">if</span> (UTXO.isMine(publicKey)) &#123;                                                <span class="hljs-comment">// 查看输出是否属于我即货币是不是我的</span><br>                UTXOs.put(UTXO.transactionOutputId, UTXO);                               <span class="hljs-comment">// 添加到未使用的交易列表中</span><br>                total = total.add(UTXO.amount);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> total;<br>    &#125;<br><br>    <span class="hljs-comment">//创建并返回属于这个钱包的一个新交易</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Transaction <span class="hljs-title">createTransaction</span><span class="hljs-params">(PublicKey _recipient, BigDecimal value)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (getBalance().compareTo(value) == -<span class="hljs-number">1</span>) &#123;                                       <span class="hljs-comment">//搜集余额并检查金额</span><br>            System.out.println(<span class="hljs-string">"余额不足，创建交易失败！"</span>);<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>        &#125;<br><br>        <span class="hljs-comment">//创建输入列表</span><br>        List&lt;TransactionInput&gt; inputs = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br>        BigDecimal total = <span class="hljs-keyword">new</span> BigDecimal(<span class="hljs-number">0</span>);<br>        <span class="hljs-keyword">for</span> (Map.Entry&lt;String, TransactionOutput&gt; item: UTXOs.entrySet())&#123;<br>            TransactionOutput UTXO = item.getValue();<br>            total = total.add(UTXO.amount);<br>            inputs.add(<span class="hljs-keyword">new</span> TransactionInput(UTXO.transactionOutputId));                  <span class="hljs-comment">//把之前别人发给我的交易的输出作为本次交易的输入</span><br>            <span class="hljs-keyword">if</span>(total.compareTo(value) == <span class="hljs-number">1</span>) <span class="hljs-keyword">break</span>;<br>        &#125;<br>        Transaction newTransaction = <span class="hljs-keyword">new</span> Transaction(publicKey, _recipient , value, inputs);<br>        <span class="hljs-comment">//添加签名</span><br>        newTransaction.generateSignature(privateKey);<br>        <span class="hljs-comment">//移除了被使用的输出</span><br>        <span class="hljs-keyword">for</span>(TransactionInput input: inputs)&#123;<br>            UTXOs.remove(input.transactionOutputId);<br>        &#125;<br>        <span class="hljs-keyword">return</span> newTransaction;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> PublicKey <span class="hljs-title">getPublicKey</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> publicKey;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setPublicKey</span><span class="hljs-params">(PublicKey publicKey)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.publicKey = publicKey;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> PrivateKey <span class="hljs-title">getPrivateKey</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> privateKey;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setPrivateKey</span><span class="hljs-params">(PrivateKey privateKey)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.privateKey = privateKey;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toString</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> EncryptUtil.getStringFromKey(publicKey) + <span class="hljs-string">"  :  "</span> + EncryptUtil.getStringFromKey(privateKey);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="写到这里，你肯定想知道输入输出是设计逻辑又是什么。"><a href="#写到这里，你肯定想知道输入输出是设计逻辑又是什么。" class="headerlink" title="写到这里，你肯定想知道输入输出是设计逻辑又是什么。"></a>写到这里，你肯定想知道输入输出是设计逻辑又是什么。</h1><blockquote>
+<p>输入比较简单，因为是把别人的输出作为自己的输入。所以引用指向输出就行。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"> <span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> junan</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@version</span> V1.0</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@className</span> TransactionInput</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@disc</span></span><br><span class="hljs-comment"> * <span class="hljs-doctag">@date</span> 2019/9/19 10:03</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TransactionInput</span> </span>&#123;<br><br>    <span class="hljs-comment">//指向交易输出类 -&gt; transactionId</span><br>    <span class="hljs-keyword">public</span> String transactionOutputId;<br><br>    <span class="hljs-comment">//交易输出</span><br>    <span class="hljs-keyword">public</span> TransactionOutput UTXO;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">TransactionInput</span><span class="hljs-params">(String transactionOutputId)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.transactionOutputId = transactionOutputId;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>输出类包含输出Id（也就是输出的hash值），收款人的公钥，金额，交易编号（交易对象的hash，指明由哪个交易产生）。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> junan</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@version</span> V1.0</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@className</span> TransactionOutput</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@disc</span></span><br><span class="hljs-comment"> * <span class="hljs-doctag">@date</span> 2019/9/19 10:03</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TransactionOutput</span> </span>&#123;<br><br>    <span class="hljs-keyword">public</span> String transactionOutputId;<br>    <span class="hljs-comment">//持有者的公钥</span><br>    <span class="hljs-keyword">public</span> PublicKey recipientPublicKey;<br>    <span class="hljs-comment">//持有者的金额</span><br>    <span class="hljs-keyword">public</span> BigDecimal amount;<br>    <span class="hljs-comment">//交易编号</span><br>    <span class="hljs-keyword">public</span> String parentTransactionId;<br><br>    <span class="hljs-comment">//构造器</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">TransactionOutput</span><span class="hljs-params">(PublicKey recipientPublicKey, BigDecimal amount, String parentTransactionId)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.recipientPublicKey = recipientPublicKey;<br>        <span class="hljs-keyword">this</span>.amount = amount;<br>        <span class="hljs-keyword">this</span>.parentTransactionId = parentTransactionId;<br>        <span class="hljs-keyword">this</span>.transactionOutputId = EncryptUtil.getSHA256(EncryptUtil.getStringFromKey(recipientPublicKey) + amount + parentTransactionId);<br>    &#125;<br><br>    <span class="hljs-comment">//验证这笔输出是否属于某人</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">isMine</span><span class="hljs-params">(PublicKey publicKey)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> (publicKey.equals(recipientPublicKey));<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>下一节将进行一个简单的测试。</p>
+</blockquote>
+
+    </section>
+    <section class="extra">
+      
+      
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-%E6%8A%80%E6%9C%AF/" rel="tag">java 技术</a></li></ul>
+
+      
+<nav class="nav">
+  
+    <a href="/2020/05/05/Java%20%E5%BC%80%E5%8F%91%E5%8C%BA%E5%9D%97%E9%93%BE%EF%BC%881%EF%BC%89/"><i class="iconfont iconleft"></i>Java 开发区块链（1）</a>
+  
+  
+</nav>
+
+    </section>
+    
+      <section class="comments">
+        
+          <div class="btn" id="comments-btn">查看评论</div>
+        
+        
+<div id="valine"></div>
+<script defer src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+  window.onload = function () {
+    var loadValine = function () {
+      new Valine({
+        el: '#valine',
+        app_id: "a8aBoMUoOnc1VQB8luHmCH4Y-gzGzoHsz",
+        app_key: "EEUcoQEF0g8aC9y8tqj1koxE",
+        placeholder: "大爷来玩呀~",
+        avatar: "mp",
+        pageSize: "10",
+        lang: "zh-CN",
+      });
+    }
+    if ( true ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        loadValine();
+      });
+    } else {
+      loadValine();
+    }
+  };
+</script>
+
+      </section>
+    
+  </section>
+</article>
+  </div>
+</main>
+  <footer class="footer">
+  <div class="footer-social">
+    
+    
+    
+    
+    
+    <a href="tencent://message/?Menu=yes&uin=1286890175 " target="_blank" onMouseOver="this.style.color= '#12B7F5'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconQQ "></i>
+    </a>
+    
+    
+    
+    
+    
+    <a href="javascript:; " target="_blank" onMouseOver="this.style.color= '#09BB07'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconwechat-fill "></i>
+    </a>
+    
+    
+    
+    
+    
+    <a href="mailto:chenjunan_2018@163.com " target="_blank" onMouseOver="this.style.color='#FFBE5B'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconmail"></i>
+    </a>
+    
+  </div>
+  <div class="footer-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="http://junanaa.gitee.io/">一只小安仔</a> .AllRightsReserved</p></div>
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  <div class="fab fab-menu">
+    <i class="iconfont iconmenu"></i>
+  </div>
+  
+</body>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+
+<script src="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/justifiedGallery/3.7.0/js/jquery.justifiedGallery.min.js"></script>
+
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+<script>
+  (function () {
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    } else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</html>

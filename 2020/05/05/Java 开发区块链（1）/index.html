@@ -1,0 +1,409 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Java 开发区块链（1） - 一只小安仔</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+
+  
+  <meta name="keywords" content="一只小安仔,"> 
+  
+  <meta name="description" content="Java 开发区块链（1）前段时间用java简单写了个..."> 
+  
+  <meta name="author" content="junan"> 
+
+  
+    <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  
+  
+    <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  
+  
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  
+  
+    <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_58xq2j9v1id.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xcode.min.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/justifiedGallery/3.7.0/css/justifiedGallery.min.css">
+
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {}
+    CONFIG = {
+      fancybox: true,
+      pjax: false,
+      lazyload: {
+        enable: true,
+        loadingImage: '/images/theme/loading.gif',
+      },
+      donate_alipay: '',
+      donate_wechat: '',
+      motto: {
+        api: '',
+        default: '夜半花落听雨声，不自欢喜不自愁。'
+      },
+      galleries: {
+        enable: 'true'
+      },
+      fab: {
+        enable: 'true',
+        alwaysShow: 'false'
+      }
+    }
+  </script>
+
+  
+
+  
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body class="lock-screen">
+  <div class="loading"></div>
+  <nav class="menu">
+  <div class="menu-close">
+    <i class="iconfont iconplus"></i>
+  </div>
+  <ul class="menu-content">
+    
+    
+    
+    
+    <li class="menu-item"><a href="/ "> 首页</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/archives "> 归档</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/tags "> 标签</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/categories "> 分类</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/about "> 关于</a></li>
+    
+  </ul>
+  <div class="menu-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="http://junanaa.gitee.io/">一只小安仔</a> .AllRightsReserved</p></div>
+</nav>
+  <main id="main">
+  <div class="container" id="container">
+    <article class="article">
+  <section class="head">
+  <img   class="lazyload" data-original="https://desk-fd.zol-img.com.cn/g5/M00/0A/07/ChMkJ1klRRiIAhLXAAvwmXoWRWsAAclVgEwU5UAC_Cx492.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">Java 开发区块链（1）</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>2020-05-05</span
+        class="post-info-item">
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>13377</span>
+    </div>
+  </div>
+</section>
+  <section class="main">
+    <section class="content">
+      <h1 id="Java-开发区块链（1）"><a href="#Java-开发区块链（1）" class="headerlink" title="Java 开发区块链（1）"></a>Java 开发区块链（1）</h1><h1 id="前段时间用java简单写了个区块链，今天简单总结一下。"><a href="#前段时间用java简单写了个区块链，今天简单总结一下。" class="headerlink" title="前段时间用java简单写了个区块链，今天简单总结一下。"></a>前段时间用java简单写了个区块链，今天简单总结一下。</h1><blockquote>
+<p>区块链的核心比较简单，本质呢是一个分布式的数据库。主要作用是储存信息。任何需要保存的信息，都可以写入区块链，也可以从里面读取，所以它是数据库。</p>
+</blockquote>
+<blockquote>
+<p>任何人都可以架设服务器，加入区块链网络，成为一个节点。区块链的世界里面，没有中心节点，<strong>每个节点都是平等的，都保存着整个数据库。</strong>你可以向任何一个节点，写入/读取数据，因为所有节点最后都会同步，保证区块链一致。</p>
+</blockquote>
+<blockquote>
+<p>区块链核心还有一个叫去中心化，或者说是彻底无中心的，你想哈，普通一个系统，它是有管理员的，管理员通过用户名密码可以进入后台看到所有的数据，可以更改所有的数据库数据。（就如我现在所开发的一些javaweb的系统）。而区块链却没有管理员，或者说人人都是管理员，都可以写入数据。你肯定想，人人都可以向里面写数据，那岂不是不安全（要是坏人也向里面写，岂不完蛋）。这个问题等会儿你就明白了。</p>
+</blockquote>
+<blockquote>
+<p>区块链呢是一个链（chain）嘛，如果你学编程应该知道List，它不就是个链吗？(这次我们使用单链表实现区块链)这个链呢就好比整个数据库。你肯定想比特币每天那么多数据往链里面写，那岂不是这个链非常大？18年七月份比特币区块链已经达到了170GB，预计2020年将达100TB。</p>
+</blockquote>
+<p><img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/1643159623.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="链"></p>
+<blockquote>
+<p>好了，链有了，哪区块（block）又是啥呢？这个区块可以理解为我们自定义的一个对象。你需要知道每次我们向List里面添加一个区块，我们需要向数据库写入的数据就放在这个区块里面。那区块里都有啥呢？</p>
+</blockquote>
+<blockquote>
+<p>1 区块肯定得有个标号，也就是索引，让我知道这是链中第几个区块。我们暂且称它为index。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> Long index;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>2 每个区块都有一个hash值。所谓”哈希”就是计算机可以对任意内容，计算出一个长度相同的特征值。区块链的hash值为256位的二进制数。比如123的hash值为a8fdc205a9f19cc1c7507a60c4f01b13d11d7fd0（十六进制），你将它转为二进制就是256位。我们暂不细说它这个算法的原理，只管调用就行。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> String hash;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>3 每个区块需要保存上一个区块的hash值。因为我们需要知道当前区块在这个链中的位置。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> String previousHash;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>区块中需要保存用户之间的交易。（注意你需要理解，只有加入了节点的人才有记账的权利，我们称这类人为矿工，普通人的交易信息交给矿工打包为一个区块加入到链中。）一个区块可能包括多个交易，所以我们需要将它放在一个List中。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//交易列表  Transaction:代表一个交易对象，我们后边说它</span><br><span class="hljs-keyword">private</span> List&lt;Transaction&gt; transactions;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>需要一个时间戳，记录区块产生的时间。它是一个Long的值。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//区块时间戳</span><br><span class="hljs-keyword">private</span> Long timeStamp;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>需要一个工作量证明参数，它的作用是用来挖矿，后边会说，现在先写着。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//工作量证明 (一个随机数)</span><br><span class="hljs-keyword">private</span> Integer nonce = <span class="hljs-number">0</span>;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>需要一个挖矿难度，来限制矿工挖矿的时间。这个后边会说。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//挖矿难度</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> difficulty;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>还有一个参数叫merkleRoot，区块中所有交易都按照Merkle Tree的格式组织起来，这是一种树结构，保证本区块交易信息的不可篡改。我们也后边说。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> String merkleRoot;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>整个的Block类属性：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> junan</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@version</span> V1.0</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@className</span> Block</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@disc</span></span><br><span class="hljs-comment"> * <span class="hljs-doctag">@date</span> 2019/9/16 11:45</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Block</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Serializable</span> </span>&#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">long</span> serialVersionUID = <span class="hljs-number">398677310091891619L</span>;<br>    <span class="hljs-comment">//块索引</span><br>    <span class="hljs-keyword">private</span> Long index;<br>    <span class="hljs-comment">//当前区块hash值</span><br>    <span class="hljs-keyword">private</span> String hash;<br>    <span class="hljs-comment">//上一个区块hash值</span><br>    <span class="hljs-keyword">private</span> String previousHash;<br><br>    <span class="hljs-keyword">public</span> String merkleRoot;<br>    <span class="hljs-comment">//交易列表</span><br>    <span class="hljs-keyword">private</span> List&lt;Transaction&gt; transactions;<br>    <span class="hljs-comment">//区块时间戳</span><br>    <span class="hljs-keyword">private</span> Long timeStamp;<br>    <span class="hljs-comment">//工作量证明 (一个随机数)</span><br>    <span class="hljs-keyword">private</span> Integer nonce = <span class="hljs-number">0</span>;<br>    <span class="hljs-comment">//挖矿难度</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> difficulty;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="挖矿-mining-的原理"><a href="#挖矿-mining-的原理" class="headerlink" title="挖矿(mining)的原理"></a>挖矿(mining)的原理</h1><blockquote>
+<p>挖矿看上去很神秘，其实也不难理解，你想嘛，这个区块链上的矿工那么多，但是每次向区块链添加区块只能由一个人，如果人人都一起往链中加区块，那岂不是乱了套了。为了选出谁能来写入区块，就出现了挖矿。区块链的发明者中本聪（这是假名，真实身份至今未知）故意让添加新区块，变得很困难。他的设计是，平均每10分钟，全网才能生成一个新区块，一小时也就六个。这个10 分钟并不是一定的，只是通过动态调节这个挖矿的难度来限制一个区块产生的时间。</p>
+</blockquote>
+<blockquote>
+<p>挖矿这个过程你可以理解为就是在一值产生随机数，直到找到一个合适的随机数，使得区块头的哈希可以小于目标值。就是上面的nonce，相信你注意到的我上面写的是int，说明他最大的值为21.47亿多。nonce从0开始，带到一个算法中进行计算结果。如果计算的结果满足条件，那么你就能成为下一个写入区块链区块的人。你看，如果你运气好，说不定0就是这个合适的随机数，如果运气不好，你需要尝试21亿次。（注意不要理解错了，每个人需要找的nonce值是不一样的，这个你后边会知道的）。</p>
+</blockquote>
+<blockquote>
+<p>明白了挖矿就是在寻找一个合适的nonce值。我们可以走一下代码，我向Block中添加了这个挖矿的方法。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 提高计算难度（挖矿）</span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">mineBlock</span><span class="hljs-params">()</span> </span>&#123;<br>    merkleRoot = StringUtil.getMerkleRoot(transactions);    <span class="hljs-comment">// 这一步你先理解为把transactions取hash</span><br>    String target = <span class="hljs-keyword">new</span> String(<span class="hljs-keyword">new</span> <span class="hljs-keyword">char</span>[difficulty]).replace(<span class="hljs-string">'\0'</span>, <span class="hljs-string">'0'</span>);     <span class="hljs-comment">//这个target看下面的讲解。</span><br>    hash = calculationHash();             <span class="hljs-comment">// 计算当前Block的hash</span><br>    <span class="hljs-keyword">while</span>(!hash.substring( <span class="hljs-number">0</span>, difficulty).equals(target)) &#123;        判断当前的hash是否满足条件<br>        nonce++;     <span class="hljs-comment">// 不满足就算出下一个nonce</span><br>        hash = calculationHash();     <span class="hljs-comment">//计算新的hash值进行判断是否满足条件。</span><br>    &#125;<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 计算当前hash</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">calculationHash</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">return</span> EncryptUtil.getSHA256(previousHash + timeStamp + merkleRoot + nonce);<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>这里我需要解释我的代码，第一步我们计算了merkleRoot的值，因为计算当前block的hash需要previousHash ，timeStamp ， merkleRoot ， nonce这四个参数参与计算（nonce是变数）。这个merkleRoot代表交易列表transactions。你不用完全搞懂计算hash的算法，只需要知道这个算法产生一个256位的二进制数，前面已经说过了，比如字符串123进行hash算法结果是a8fdc205a9f19cc1c7507a60c4f01b13d11d7fd0（十六进制），你需要知道不管你的输入是什么，输出永远是256位的二进制数。</p>
+</blockquote>
+<blockquote>
+<p>这个target是一个字符串，这个difficulty（挖矿难度）是一个int值，target就是difficulty个0的字符串。最后产生的区块hash值需要满足前difficulty位和target相等，这就是挖矿难度。你需要产生的hash值满足这个条件。这个难度系数在区块链中是自由调节的，这样才能满足大概10分钟产生一个区块。比特币第100000个区块的难度系数是 14484.16236122。中本聪设计了难度系数的动态调节机制。他规定，难度系数每两周（2016个区块）调整一次。如果这两周里面，区块的平均生成速度是9分钟，就意味着比法定速度快了10%，因此接下来的难度系数就要调高10%；如果平均生成速度是11分钟，就意味着比法定速度慢了10%，因此接下来的难度系数就要调低10%。难度系数越调越高（目标值越来越小），导致了采矿越来越难。</p>
+</blockquote>
+<blockquote>
+<p>还需要向Block中添加一个向区块添加交易的方法。如下：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 向区块添加一笔交易</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> transaction</span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> Boolean <span class="hljs-title">addTransaction</span><span class="hljs-params">(Transaction transaction)</span> </span>&#123;<br>    <span class="hljs-comment">//处理交易并检查是否有效，创世纪区块将被忽略</span><br>    <span class="hljs-keyword">if</span>(transaction == <span class="hljs-keyword">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>    <span class="hljs-keyword">if</span>((previousHash != <span class="hljs-string">"0"</span>)) &#123;   <span class="hljs-comment">//如果是创世区块（区块链中第一个区块），就忽略检查。</span><br>        <span class="hljs-keyword">if</span>((transaction.processTransaction() != <span class="hljs-keyword">true</span>)) &#123;   <span class="hljs-comment">//检查交易是否有效</span><br>            System.out.println(<span class="hljs-string">"Transaction failed to process. Discarded."</span>);<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-comment">//交易有效，就添加到交易列表中</span><br>    transactions.add(transaction);<br>    System.out.println(<span class="hljs-string">"Transaction Successfully added to Block"</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>添加交易的这个方法比较简单，就不解释了。</p>
+</blockquote>
+<blockquote>
+<p>对了，差点少了构造方法。如下：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//禁用默认的构造器</span><br><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Block</span><span class="hljs-params">()</span></span>&#123;&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Block</span><span class="hljs-params">(Long previousIndex, String previousHash, List&lt;Transaction&gt; transactions, <span class="hljs-keyword">int</span> difficulty)</span> </span>&#123;<br>    <span class="hljs-keyword">this</span>.index = previousIndex + <span class="hljs-number">1</span>;     <span class="hljs-comment">// 当前区块的索引等于上一个+1</span><br>    <span class="hljs-keyword">this</span>.previousHash = previousHash;   <span class="hljs-comment">// 记录上一个区块的索引</span><br>    <span class="hljs-keyword">if</span>(transactions != <span class="hljs-keyword">null</span> &amp;&amp; transactions.size() &gt; <span class="hljs-number">0</span>)<br>        <span class="hljs-keyword">this</span>.transactions = transactions;<br>    <span class="hljs-keyword">else</span><br>        <span class="hljs-keyword">this</span>.transactions = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br>    <span class="hljs-keyword">this</span>.timeStamp = System.currentTimeMillis();   <span class="hljs-comment">// 获取当前的时间戳</span><br>    <span class="hljs-keyword">this</span>.difficulty = difficulty;       <span class="hljs-comment">// 挖矿难度系数   </span><br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>那么区块类的全部方法和属性就确定了。如下：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><code class="hljs java">  <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Block</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Serializable</span> </span>&#123;<br><br>   <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">long</span> serialVersionUID = <span class="hljs-number">398677310091891619L</span>;<br>   <span class="hljs-comment">//块索引</span><br>   <span class="hljs-keyword">private</span> Long index;<br>   <span class="hljs-comment">//当前区块hash值</span><br>   <span class="hljs-keyword">private</span> String hash;<br>   <span class="hljs-comment">//上一个区块hash值</span><br>   <span class="hljs-keyword">private</span> String previousHash;<br><br>   <span class="hljs-keyword">public</span> String merkleRoot;<br>   <span class="hljs-comment">//交易列表</span><br>   <span class="hljs-keyword">private</span> List&lt;Transaction&gt; transactions;<br>   <span class="hljs-comment">//区块时间戳</span><br>   <span class="hljs-keyword">private</span> Long timeStamp;<br>   <span class="hljs-comment">//工作量证明 (一个随机数)</span><br>   <span class="hljs-keyword">private</span> Integer nonce = <span class="hljs-number">0</span>;<br>   <span class="hljs-comment">//挖矿难度</span><br>   <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> difficulty;<br><br>   <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Block</span><span class="hljs-params">()</span></span>&#123;&#125;<br><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Block</span><span class="hljs-params">(Long previousIndex, String previousHash, List&lt;Transaction&gt; transactions, <span class="hljs-keyword">int</span> difficulty)</span> </span>&#123;<br>       <span class="hljs-keyword">this</span>.index = previousIndex + <span class="hljs-number">1</span>;<br>       <span class="hljs-keyword">this</span>.previousHash = previousHash;<br>       <span class="hljs-keyword">if</span>(transactions != <span class="hljs-keyword">null</span> &amp;&amp; transactions.size() &gt; <span class="hljs-number">0</span>)<br>           <span class="hljs-keyword">this</span>.transactions = transactions;<br>       <span class="hljs-keyword">else</span><br>           <span class="hljs-keyword">this</span>.transactions = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br>       <span class="hljs-keyword">this</span>.timeStamp = System.currentTimeMillis();<br>       <span class="hljs-keyword">this</span>.difficulty = difficulty;<br>   &#125;<br><br>   <span class="hljs-comment">/**</span><br><span class="hljs-comment">    * 提高计算难度（挖矿）</span><br><span class="hljs-comment">    */</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">mineBlock</span><span class="hljs-params">()</span> </span>&#123;<br>       merkleRoot = StringUtil.getMerkleRoot(transactions);<br>       String target = <span class="hljs-keyword">new</span> String(<span class="hljs-keyword">new</span> <span class="hljs-keyword">char</span>[difficulty]).replace(<span class="hljs-string">'\0'</span>, <span class="hljs-string">'0'</span>);<br>       hash = calculationHash();<br>       <span class="hljs-keyword">while</span>(!hash.substring( <span class="hljs-number">0</span>, difficulty).equals(target)) &#123;<br>           nonce++;<br>           hash = calculationHash();<br>       &#125;<br>   &#125;<br><br>   <span class="hljs-comment">/**</span><br><span class="hljs-comment">    * 计算当前hash</span><br><span class="hljs-comment">    * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">    */</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">calculationHash</span><span class="hljs-params">()</span></span>&#123;<br>       <span class="hljs-keyword">return</span> EncryptUtil.getSHA256(previousHash + timeStamp + merkleRoot + nonce);<br>   &#125;<br><br>   <span class="hljs-comment">/**</span><br><span class="hljs-comment">    * 向区块添加一笔交易</span><br><span class="hljs-comment">    * <span class="hljs-doctag">@param</span> transaction</span><br><span class="hljs-comment">    */</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> Boolean <span class="hljs-title">addTransaction</span><span class="hljs-params">(Transaction transaction)</span> </span>&#123;<br>       <span class="hljs-comment">//处理交易并检查是否有效，创世纪区块将被忽略</span><br>       <span class="hljs-keyword">if</span>(transaction == <span class="hljs-keyword">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>       <span class="hljs-keyword">if</span>((previousHash != <span class="hljs-string">"0"</span>)) &#123;<br>           <span class="hljs-keyword">if</span>((transaction.processTransaction() != <span class="hljs-keyword">true</span>)) &#123;<br>               System.out.println(<span class="hljs-string">"Transaction failed to process. Discarded."</span>);<br>               <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>           &#125;<br>       &#125;<br>       transactions.add(transaction);<br>       System.out.println(<span class="hljs-string">"Transaction Successfully added to Block"</span>);<br>       <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br>   &#125;<br>  <span class="hljs-comment">//省略setter，getter，toString()</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>区块链（BlockChain）的类中属性方法也基本确定，如下：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><code class="hljs java"> <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BlockChain</span> </span>&#123;<br><br>  <span class="hljs-keyword">private</span> List&lt;Block&gt; blocks;<br><br>  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">BlockChain</span><span class="hljs-params">()</span> </span>&#123;<br>      <span class="hljs-keyword">this</span>(<span class="hljs-keyword">null</span>);<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">BlockChain</span><span class="hljs-params">(List&lt;Block&gt; blocks)</span> </span>&#123;<br>      <span class="hljs-comment">//创建区块链</span><br>      <span class="hljs-keyword">if</span>(blocks == <span class="hljs-keyword">null</span>)<br>          blocks = <span class="hljs-keyword">new</span> LinkedList&lt;&gt;();<br>      <span class="hljs-keyword">this</span>.blocks = blocks;<br>  &#125;<br><br>  <span class="hljs-comment">//向区块链加入一个区块</span><br>  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">addBlock</span><span class="hljs-params">(Block block)</span> </span>&#123;<br>      block.mineBlock();<br>      <span class="hljs-keyword">this</span>.blocks.add(block);<br>  &#125;<br>  <br>  <span class="hljs-comment">//  获取区块的大小</span><br>  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> </span>&#123;<br>      <span class="hljs-keyword">return</span> blocks.size();<br>  &#125;<br><br>  <span class="hljs-comment">//按索引获取区块</span><br>  <span class="hljs-function"><span class="hljs-keyword">public</span> Block <span class="hljs-title">get</span><span class="hljs-params">(<span class="hljs-keyword">int</span> index)</span> </span>&#123;<br>      <span class="hljs-keyword">return</span> blocks.get(index - <span class="hljs-number">1</span>);<br>  &#125;<br><br>  <span class="hljs-comment">/**</span><br><span class="hljs-comment">   *  获取当前区块链最后一个区块</span><br><span class="hljs-comment">   * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">   */</span><br>  <span class="hljs-function"><span class="hljs-keyword">public</span> Block <span class="hljs-title">lastBlock</span><span class="hljs-params">()</span> </span>&#123;<br>      <span class="hljs-keyword">return</span> blocks.get(blocks.size() - <span class="hljs-number">1</span>);<br>  &#125;<br><br>  <span class="hljs-comment">/**</span><br><span class="hljs-comment">   * 当前区块链是否有效</span><br><span class="hljs-comment">   * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">   */</span><br>  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">isChainValid</span> <span class="hljs-params">()</span> </span>&#123;<br>      Block currentBlock  = <span class="hljs-keyword">this</span>.lastBlock();   <span class="hljs-comment">//获取区块链最后一个区块</span><br>      Block previousBlock = <span class="hljs-keyword">this</span>.get(<span class="hljs-keyword">this</span>.size() - <span class="hljs-number">1</span>);      <span class="hljs-comment">// 获取最后一个前一个区块</span><br>      <span class="hljs-comment">//比较计算最后一个区块的hash</span><br>      <span class="hljs-keyword">if</span>(!currentBlock.getHash().equals(currentBlock.calculationHash()))<br>          <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>      <span class="hljs-comment">//这个你猜猜</span><br>      <span class="hljs-keyword">if</span>(!currentBlock.getPreviousHash().equals(previousBlock.getHash()))<br>          <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>      <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br>  &#125;<br> <span class="hljs-comment">//省略setter，getter</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>今天只讲解了BlockChain和Block的设计，下篇文章讲解钱包和交易类的设计。下面是其他的工具类：<br>计算hash的工具：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><code class="hljs java">   <span class="hljs-comment">/**</span><br><span class="hljs-comment">    * <span class="hljs-doctag">@author</span> junan</span><br><span class="hljs-comment">    * <span class="hljs-doctag">@version</span> V1.0</span><br><span class="hljs-comment">    * <span class="hljs-doctag">@className</span> EncryptUtil</span><br><span class="hljs-comment">    * <span class="hljs-doctag">@disc</span></span><br><span class="hljs-comment">    * <span class="hljs-doctag">@date</span> 2019/9/16 14:50</span><br><span class="hljs-comment">    */</span><br>   <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">EncryptUtil</span> </span>&#123;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 传入字符串，返回 SHA-256 加密字符串</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> strText</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">getSHA256</span><span class="hljs-params">(<span class="hljs-keyword">final</span> String strText)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> SHA(strText, <span class="hljs-string">"SHA-256"</span>);<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 传入字符串，返回 SHA-512 加密字符串</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> strText</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">getSHA512</span><span class="hljs-params">(<span class="hljs-keyword">final</span> String strText)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> SHA(strText, <span class="hljs-string">"SHA-512"</span>);<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 传入字符串，返回 MD5 加密字符串</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> strText</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getMD5</span><span class="hljs-params">(<span class="hljs-keyword">final</span> String strText)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> SHA(strText, <span class="hljs-string">"md5"</span>);<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 字符串 SHA 加密</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span></span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">SHA</span><span class="hljs-params">(<span class="hljs-keyword">final</span> String strText, <span class="hljs-keyword">final</span> String strType)</span> </span>&#123;<br>        <span class="hljs-comment">// 返回值</span><br>        String strResult = <span class="hljs-keyword">null</span>;<br><br>        <span class="hljs-comment">// 是否是有效字符串</span><br>        <span class="hljs-keyword">if</span> (strText != <span class="hljs-keyword">null</span> &amp;&amp; strText.length() &gt; <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">try</span> &#123;<br>                <span class="hljs-comment">// SHA 加密开始</span><br>                <span class="hljs-comment">// 创建加密对象，传入加密类型</span><br>                MessageDigest messageDigest = MessageDigest.getInstance(strType);<br>                <span class="hljs-comment">// 传入要加密的字符串</span><br>                messageDigest.update(strText.getBytes());<br>                <span class="hljs-comment">// 得到 byte 数组</span><br>                <span class="hljs-keyword">byte</span> byteBuffer[] = messageDigest.digest();<br><br>                <span class="hljs-comment">// 將 byte 数组转换 string 类型</span><br>                StringBuffer strHexString = <span class="hljs-keyword">new</span> StringBuffer();<br>                <span class="hljs-comment">// 遍历 byte 数组</span><br>                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; byteBuffer.length; i++) &#123;<br>                    <span class="hljs-comment">// 转换成16进制并存储在字符串中</span><br>                    String hex = Integer.toHexString(<span class="hljs-number">0xff</span> &amp; byteBuffer[i]);<br>                    <span class="hljs-keyword">if</span> (hex.length() == <span class="hljs-number">1</span>) &#123;<br>                        strHexString.append(<span class="hljs-string">'0'</span>);<br>                    &#125;<br>                    strHexString.append(hex);<br>                &#125;<br>                <span class="hljs-comment">// 得到返回結果</span><br>                strResult = strHexString.toString();<br>            &#125; <span class="hljs-keyword">catch</span> (NoSuchAlgorithmException e) &#123;<br>                e.printStackTrace();<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> strResult;<br>    &#125;<br><br>    <span class="hljs-comment">//应用ECDSA签名并产生字符数组</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">byte</span>[] applyECDSASig(PrivateKey privateKey, String input) &#123;<br>        Signature dsa;<br>        <span class="hljs-keyword">byte</span>[] output = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[<span class="hljs-number">0</span>];<br>        <span class="hljs-keyword">try</span> &#123;<br>            dsa = Signature.getInstance(<span class="hljs-string">"ECDSA"</span>, <span class="hljs-string">"BC"</span>);<br>            dsa.initSign(privateKey);<br>            <span class="hljs-keyword">byte</span>[] strByte = input.getBytes();<br>            dsa.update(strByte);<br>            <span class="hljs-keyword">byte</span>[] realSig = dsa.sign();<br>            output = realSig;<br>        &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(e);<br>        &#125;<br>        <span class="hljs-keyword">return</span> output;<br>    &#125;<br><br>    <span class="hljs-comment">//应用ECDSA验证数字签名</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">verifyECDSASig</span><span class="hljs-params">(PublicKey publicKey, String data, <span class="hljs-keyword">byte</span>[] signature)</span> </span>&#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            Signature ecdsaVerify = Signature.getInstance(<span class="hljs-string">"ECDSA"</span>, <span class="hljs-string">"BC"</span>);<br>            ecdsaVerify.initVerify(publicKey);<br>            ecdsaVerify.update(data.getBytes());<br>            <span class="hljs-keyword">return</span> ecdsaVerify.verify(signature);<br>        &#125;<span class="hljs-keyword">catch</span>(Exception e) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(e);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">getStringFromKey</span><span class="hljs-params">(Key key)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> Base64.getEncoder().encodeToString(key.getEncoded());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>StringUtil</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java">   <span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> junan</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@version</span> V1.0</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@className</span> StringUtil</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@disc</span></span><br><span class="hljs-comment"> * <span class="hljs-doctag">@date</span> 2019/9/19 15:52</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StringUtil</span> </span>&#123;<br><br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">getMerkleRoot</span><span class="hljs-params">(List&lt;Transaction&gt; transactions)</span> </span>&#123;<br>        <span class="hljs-keyword">int</span> count = transactions.size();<br>        List&lt;String&gt; previousTreeLayer = <span class="hljs-keyword">new</span> ArrayList&lt;String&gt;();<br>        <span class="hljs-keyword">for</span>(Transaction transaction : transactions) &#123;<br>            previousTreeLayer.add(transaction.getTransactionHash());<br>        &#125;<br>        List&lt;String&gt; treeLayer = previousTreeLayer;<br>        <span class="hljs-keyword">while</span>(count &gt; <span class="hljs-number">1</span>) &#123;<br>            treeLayer = <span class="hljs-keyword">new</span> ArrayList&lt;String&gt;();<br>            <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>; i &lt; previousTreeLayer.size(); i++) &#123;<br>                treeLayer.add(EncryptUtil.getSHA256(previousTreeLayer.get(i-<span class="hljs-number">1</span>) + previousTreeLayer.get(i)));<br>            &#125;<br>            count = treeLayer.size();<br>            previousTreeLayer = treeLayer;<br>        &#125;<br>        String merkleRoot = (treeLayer.size() == <span class="hljs-number">1</span>) ? treeLayer.get(<span class="hljs-number">0</span>) : <span class="hljs-string">""</span>;<br>        <span class="hljs-keyword">return</span> merkleRoot;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+    </section>
+    <section class="extra">
+      
+      
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-%E6%8A%80%E6%9C%AF/" rel="tag">java 技术</a></li></ul>
+
+      
+<nav class="nav">
+  
+    <a href="/2020/05/05/Java%20%E5%BC%80%E5%8F%91%E5%8C%BA%E5%9D%97%E9%93%BE%EF%BC%883%EF%BC%89/"><i class="iconfont iconleft"></i>Java 开发区块链（3）</a>
+  
+  
+    <a href="/2020/05/05/Java%20%E5%BC%80%E5%8F%91%E5%8C%BA%E5%9D%97%E9%93%BE%EF%BC%882%EF%BC%89/">Java 开发区块链（2）<i class="iconfont iconright"></i></a>
+  
+</nav>
+
+    </section>
+    
+      <section class="comments">
+        
+          <div class="btn" id="comments-btn">查看评论</div>
+        
+        
+<div id="valine"></div>
+<script defer src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+  window.onload = function () {
+    var loadValine = function () {
+      new Valine({
+        el: '#valine',
+        app_id: "a8aBoMUoOnc1VQB8luHmCH4Y-gzGzoHsz",
+        app_key: "EEUcoQEF0g8aC9y8tqj1koxE",
+        placeholder: "大爷来玩呀~",
+        avatar: "mp",
+        pageSize: "10",
+        lang: "zh-CN",
+      });
+    }
+    if ( true ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        loadValine();
+      });
+    } else {
+      loadValine();
+    }
+  };
+</script>
+
+      </section>
+    
+  </section>
+</article>
+  </div>
+</main>
+  <footer class="footer">
+  <div class="footer-social">
+    
+    
+    
+    
+    
+    <a href="tencent://message/?Menu=yes&uin=1286890175 " target="_blank" onMouseOver="this.style.color= '#12B7F5'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconQQ "></i>
+    </a>
+    
+    
+    
+    
+    
+    <a href="javascript:; " target="_blank" onMouseOver="this.style.color= '#09BB07'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconwechat-fill "></i>
+    </a>
+    
+    
+    
+    
+    
+    <a href="mailto:chenjunan_2018@163.com " target="_blank" onMouseOver="this.style.color='#FFBE5B'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconmail"></i>
+    </a>
+    
+  </div>
+  <div class="footer-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="http://junanaa.gitee.io/">一只小安仔</a> .AllRightsReserved</p></div>
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  <div class="fab fab-menu">
+    <i class="iconfont iconmenu"></i>
+  </div>
+  
+</body>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+
+<script src="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/justifiedGallery/3.7.0/js/jquery.justifiedGallery.min.js"></script>
+
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+<script>
+  (function () {
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    } else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</html>
