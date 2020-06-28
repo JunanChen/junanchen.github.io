@@ -1,0 +1,405 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>你如何遍历集合？ - 一只小安仔</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+
+  
+  <meta name="keywords" content="一只小安仔,"> 
+  
+  <meta name="description" content="你如何遍历集合？
+今天在阿里巴巴java开发手册里看到..."> 
+  
+  <meta name="author" content="junan"> 
+
+  
+    <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  
+  
+    <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  
+  
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  
+  
+    <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_58xq2j9v1id.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xcode.min.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/justifiedGallery/3.7.0/css/justifiedGallery.min.css">
+
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {}
+    CONFIG = {
+      fancybox: true,
+      pjax: false,
+      lazyload: {
+        enable: true,
+        loadingImage: '/images/theme/loading.gif',
+      },
+      donate_alipay: '',
+      donate_wechat: '',
+      motto: {
+        api: '',
+        default: '夜半花落听雨声，不自欢喜不自愁。'
+      },
+      galleries: {
+        enable: 'true'
+      },
+      fab: {
+        enable: 'true',
+        alwaysShow: 'false'
+      }
+    }
+  </script>
+
+  
+
+  
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body class="lock-screen">
+  <div class="loading"></div>
+  <nav class="menu">
+  <div class="menu-close">
+    <i class="iconfont iconplus"></i>
+  </div>
+  <ul class="menu-content">
+    
+    
+    
+    
+    <li class="menu-item"><a href="/ "> 首页</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/archives "> 归档</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/tags "> 标签</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/categories "> 分类</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/about "> 关于</a></li>
+    
+  </ul>
+  <div class="menu-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="http://junanaa.gitee.io/">一只小安仔</a> .AllRightsReserved</p></div>
+</nav>
+  <main id="main">
+  <div class="container" id="container">
+    <article class="article">
+  <section class="head">
+  <img   class="lazyload" data-original="http://img1.juimg.com/190417/96242-1Z41G955239.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">你如何遍历集合？</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>2020-05-05</span
+        class="post-info-item">
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>5303</span>
+    </div>
+  </div>
+</section>
+  <section class="main">
+    <section class="content">
+      <h1 id="你如何遍历集合？"><a href="#你如何遍历集合？" class="headerlink" title="你如何遍历集合？"></a>你如何遍历集合？</h1><blockquote>
+<p>今天在阿里巴巴java开发手册里看到一个强制规定原文如下：</p>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>【强制】不要在 foreach 循环里进行元素的 remove / add 操作。 remove 元素请使用 Iterator方式,如果并发操作,需要对 Iterator 对象加锁。</p>
+</blockquote>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//反例</span><br>  List&lt;String&gt; a = <span class="hljs-keyword">new</span> ArrayList&lt;String&gt;();<br>  a.add(<span class="hljs-string">"1"</span>);<br>  a.add(<span class="hljs-string">"2"</span>);<br>  <span class="hljs-keyword">for</span> (String temp : a) &#123;<br>      <span class="hljs-keyword">if</span>(<span class="hljs-string">"1"</span>.equals(temp))&#123;<br>          a.remove(temp);<br>      &#125;<br>  &#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<blockquote>
+<p>说明:以上代码的执行结果肯定会出乎大家的意料,那么试一下把“1”换成“2”,会是同样的<br>结果吗?</p>
+</blockquote>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//正例</span><br>  Iterator&lt;String&gt; it = a.iterator();<br>  <span class="hljs-keyword">while</span>(it.hasNext())&#123;<br>      String temp =  it.next();<br>      <span class="hljs-keyword">if</span>(删除元素的条件)&#123;<br>        it.remove();<br>      &#125;<br>  &#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<blockquote>
+<p>根据我的经验知道这个程序一定会抛java.util.ConcurrentModificationException异常,在我的这篇文章中提到过这个fail-fast（称为快速失败）<a href="https://www.jianshu.com/p/e81cf424542b" target="_blank" rel="noopener">对list的基础巩固</a>。于是愉快的开始了验证。可气人的是这段代码居然运行通过。然后我把”1”换成”2”再运行，果断java.util.ConcurrentModificationException异常。那么问题来了，为啥”1”不报错呢？</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>我们先从foreach入手吧，我们都知道，foreach性能比for好，并且foreach写起来更加简洁，很多时候我们采用foreach遍历元素，而不采用for。可你想过foreach底层如何做的吗？</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>我们通过对这段代码的class文件进行反编译，结果如下：</p>
+</blockquote>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java">List a = <span class="hljs-keyword">new</span> ArrayList();<br>a.add(<span class="hljs-string">"1"</span>);<br>a.add(<span class="hljs-string">"2"</span>);<br>Iterator i$ = a.iterator();<br><span class="hljs-keyword">do</span><br>&#123;<br>    <span class="hljs-keyword">if</span>(!i$.hasNext())<br>        <span class="hljs-keyword">break</span>;<br>    String temp = (String)i$.next();<br>    <span class="hljs-keyword">if</span>(<span class="hljs-string">"1"</span>.equals(temp))<br>          a.remove(temp);<br>&#125; <span class="hljs-keyword">while</span>(<span class="hljs-keyword">true</span>);<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<blockquote>
+<p>foreach底层采用iterator对元素进行遍历。因为创建iterator的代价很小。接下来给大家带来jdk1.8的iterator源码分析。</p>
+</blockquote>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Iterator</span>&lt;<span class="hljs-title">E</span>&gt; </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">boolean</span> <span class="hljs-title">hasNext</span><span class="hljs-params">()</span></span>;<br><br>    <span class="hljs-function">E <span class="hljs-title">next</span><span class="hljs-params">()</span></span>;<br>   <br>    <span class="hljs-function"><span class="hljs-keyword">default</span> <span class="hljs-keyword">void</span> <span class="hljs-title">remove</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> UnsupportedOperationException(<span class="hljs-string">"remove"</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">default</span> <span class="hljs-keyword">void</span> <span class="hljs-title">forEachRemaining</span><span class="hljs-params">(Consumer&lt;? <span class="hljs-keyword">super</span> E&gt; action)</span> </span>&#123;<br>        Objects.requireNonNull(action);<br>        <span class="hljs-keyword">while</span> (hasNext())<br>            action.accept(next());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<blockquote>
+<p>前2个方法应该很熟悉，我们来看看iterator的实现（这里看arraylist的实现，其他类似。）</p>
+</blockquote>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-keyword">private</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Itr</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Iterator</span>&lt;<span class="hljs-title">E</span>&gt; </span>&#123;<br>        <span class="hljs-keyword">int</span> cursor;                     <span class="hljs-comment">// index of next element to return</span><br>        <span class="hljs-keyword">int</span> lastRet = -<span class="hljs-number">1</span>;            <span class="hljs-comment">// index of last element returned; -1 if no such</span><br>        <span class="hljs-keyword">int</span> expectedModCount = modCount;<br><br>        Itr() &#123;&#125;<br><br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">hasNext</span><span class="hljs-params">()</span> </span>&#123;<br>            <span class="hljs-keyword">return</span> cursor != size;<br>        &#125;<br><br>        <span class="hljs-meta">@SuppressWarnings</span>(<span class="hljs-string">"unchecked"</span>)<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> E <span class="hljs-title">next</span><span class="hljs-params">()</span> </span>&#123;<br>            checkForComodification();<br>            <span class="hljs-keyword">int</span> i = cursor;<br>            <span class="hljs-keyword">if</span> (i &gt;= size)<br>                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> NoSuchElementException();<br>            Object[] elementData = ArrayList.<span class="hljs-keyword">this</span>.elementData;<br>            <span class="hljs-keyword">if</span> (i &gt;= elementData.length)<br>                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ConcurrentModificationException();<br>            cursor = i + <span class="hljs-number">1</span>;<br>            <span class="hljs-keyword">return</span> (E) elementData[lastRet = i];<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">remove</span><span class="hljs-params">()</span> </span>&#123;<br>              <span class="hljs-keyword">if</span> (lastRet &lt; <span class="hljs-number">0</span>)<br>                  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IllegalStateException();<br>              checkForComodification();<br><br>                <span class="hljs-keyword">try</span> &#123;<br>                    ArrayList.<span class="hljs-keyword">this</span>.remove(lastRet);<br>                    cursor = lastRet;<br>                    lastRet = -<span class="hljs-number">1</span>;<br>                    expectedModCount = modCount;      <span class="hljs-comment">//注意这里</span><br>                &#125; <span class="hljs-keyword">catch</span> (IndexOutOfBoundsException ex) &#123;<br>                    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ConcurrentModificationException();<br>            &#125;<br>        &#125;<br>     ...省略了接口当中的forEachRemaining()方法.<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<blockquote>
+<p> 至于为何发生快速失败的的异常，在之前的文章中已经说过，就是modCount != expectedModCount导致，modCount是list被修改的次数，无论list.add()操作和list.remove()操作，modCount++，然而expectedModCount没有自动++;原因是expectedModCount是iterator的变量，而不是list的变量。只有调用iterator的remove()进行移除元素是，才会expectedModCount = modCount; 。所以在iterator中对list直接操作还是会发生问题的，删除元素，建议使用iterator的remove()的方法，可以看到，iterator好像没有add方法。我感觉add的场景也很少吧。</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>好了，接下来该聊聊为什么”1”的时候没有问题呢，通过上面的分析，我们知道，在操作了list之后，调用next()就会出现问题，因为操作list改变了modCount，而没有改变iterator的expectedModCount，于是调用next()方法时，报错。 “1”是怎么逃过的呢？</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>我测试了如下代码：</p>
+</blockquote>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java">List&lt;String&gt; a = <span class="hljs-keyword">new</span> ArrayList&lt;String&gt;();<br>a.add(<span class="hljs-string">"1"</span>);<br>a.add(<span class="hljs-string">"2"</span>);<br>a.add(<span class="hljs-string">"3"</span>);<br><br>Iterator&lt;String&gt; iterator = a.iterator();<br><span class="hljs-keyword">while</span> (iterator.hasNext()) &#123;<br>    String  s = iterator.next();<br>    System.out.println(s);<br>    <span class="hljs-keyword">if</span>(<span class="hljs-string">"2"</span>.equals(s))<br>        a.remove(s);<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<blockquote>
+<p>按这个规律我又测试了几组，发现只要是倒数第二个元素被操作，那么就不会发生问题。这是什么原因呢？我们来一步一步探索它。还是以这个程序为例：</p>
+</blockquote>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java">List&lt;String&gt; a = <span class="hljs-keyword">new</span> ArrayList&lt;String&gt;();<br>a.add(<span class="hljs-string">"1"</span>);<br>a.add(<span class="hljs-string">"2"</span>);                                     <span class="hljs-comment">//此时a的size = 2</span><br><br>Iterator&lt;String&gt; iterator = a.iterator();       <span class="hljs-comment">// 此时iterator的cursor初始化为0</span><br><span class="hljs-keyword">while</span> (iterator.hasNext()) &#123;                    <span class="hljs-comment">// size != cursor 返回true</span><br>    String  s = iterator.next();                <span class="hljs-comment">// cursor = cursor + 1 = 1</span><br>    System.out.println(s);                            <br>    <span class="hljs-keyword">if</span>(<span class="hljs-string">"1"</span>.equals(s))<br>        a.remove(s);                            <span class="hljs-comment">//size = size - 1 = 1,导致下一次循环的不执行，因为下一次循环判断cursor = size 。</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<blockquote>
+<p>当add(“1”),add(“2”)之后，a的 size = 2。a.iterator()之后执行完后，iterator的cursor = 0；第一次while， size ！= cursor，返回true，程序允许执行，iterator.next() 这句代码执行后，cursor = cursor + 1 = 1， 然后执行a.remove(s) ，此时size = size - 1 = 1，来到第二次循环，发现cursor = size，返回false，<strong>不执行下一次循环</strong>。如果执行了下一次循环，调用next()一定会报错。因为modCount ！= expectedModCount 。这下懂了吧，不报错是因为删除倒数第二个元素后少执行一次循环。当删除其他位置的元素时会多执行一次循环，而报错。这是就是cursor 和size的变化导致。</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>这里我们大部分可能关注这个异常为何发生，和如何解决。为了避免发生这种异常，必须从源头解决。那就是用iterator的remove()方法，不能因为偶然没有出错，而侥幸，给程序留下bug。</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p> 此篇文章告诉大家两个知识点，1  foreach 底层采用iterator实现。 2 不要在 foreach 循环里进行元素的 remove / add 操作。阿里巴巴java开发规范感觉不只是<br> 讲规范，而且谈到很多注意的细节，那些是别人阿里团队开发java这么多年的经验。个人感觉受益良多。这里把它分享给大家 。</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>百度网盘 : <a href="https://pan.baidu.com/s/17YCdEChbqkekdRIAb8_wKQ" target="_blank" rel="noopener">https://pan.baidu.com/s/17YCdEChbqkekdRIAb8_wKQ</a> 密码：w5qd</p>
+</blockquote>
+</blockquote>
+
+    </section>
+    <section class="extra">
+      
+      
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li></ul>
+
+      
+<nav class="nav">
+  
+    <a href="/2020/05/05/8%20spring%20security%20+%20oauth2%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E3%80%82/"><i class="iconfont iconleft"></i>spring security + oauth2实现登录。</a>
+  
+  
+    <a href="/2020/05/05/12%20centos7%E6%90%AD%E5%BB%BArabbitmq%E7%8E%AF%E5%A2%83%E3%80%82/">centos7搭建rabbitmq环境。<i class="iconfont iconright"></i></a>
+  
+</nav>
+
+    </section>
+    
+      <section class="comments">
+        
+          <div class="btn" id="comments-btn">查看评论</div>
+        
+        
+<div id="valine"></div>
+<script defer src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+  window.onload = function () {
+    var loadValine = function () {
+      new Valine({
+        el: '#valine',
+        app_id: "a8aBoMUoOnc1VQB8luHmCH4Y-gzGzoHsz",
+        app_key: "EEUcoQEF0g8aC9y8tqj1koxE",
+        placeholder: "大爷来玩呀~",
+        avatar: "mp",
+        pageSize: "10",
+        lang: "zh-CN",
+      });
+    }
+    if ( true ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        loadValine();
+      });
+    } else {
+      loadValine();
+    }
+  };
+</script>
+
+      </section>
+    
+  </section>
+</article>
+  </div>
+</main>
+  <footer class="footer">
+  <div class="footer-social">
+    
+    
+    
+    
+    
+    <a href="tencent://message/?Menu=yes&uin=1286890175 " target="_blank" onMouseOver="this.style.color= '#12B7F5'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconQQ "></i>
+    </a>
+    
+    
+    
+    
+    
+    <a href="javascript:; " target="_blank" onMouseOver="this.style.color= '#09BB07'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconwechat-fill "></i>
+    </a>
+    
+    
+    
+    
+    
+    <a href="mailto:chenjunan_2018@163.com " target="_blank" onMouseOver="this.style.color='#FFBE5B'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconmail"></i>
+    </a>
+    
+  </div>
+  <div class="footer-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="http://junanaa.gitee.io/">一只小安仔</a> .AllRightsReserved</p></div>
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  <div class="fab fab-menu">
+    <i class="iconfont iconmenu"></i>
+  </div>
+  
+</body>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+
+<script src="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/justifiedGallery/3.7.0/js/jquery.justifiedGallery.min.js"></script>
+
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+<script>
+  (function () {
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    } else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</html>

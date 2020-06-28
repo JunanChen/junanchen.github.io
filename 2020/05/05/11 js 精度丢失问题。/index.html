@@ -1,0 +1,372 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>js 精度丢失问题 - 一只小安仔</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+
+  
+  <meta name="keywords" content="一只小安仔,"> 
+  
+  <meta name="description" content="js 精度丢失问题最近很多小伙伴遇到js精度丢失的问题..."> 
+  
+  <meta name="author" content="junan"> 
+
+  
+    <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  
+  
+    <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  
+  
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  
+  
+    <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_58xq2j9v1id.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xcode.min.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/justifiedGallery/3.7.0/css/justifiedGallery.min.css">
+
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {}
+    CONFIG = {
+      fancybox: true,
+      pjax: false,
+      lazyload: {
+        enable: true,
+        loadingImage: '/images/theme/loading.gif',
+      },
+      donate_alipay: '',
+      donate_wechat: '',
+      motto: {
+        api: '',
+        default: '夜半花落听雨声，不自欢喜不自愁。'
+      },
+      galleries: {
+        enable: 'true'
+      },
+      fab: {
+        enable: 'true',
+        alwaysShow: 'false'
+      }
+    }
+  </script>
+
+  
+
+  
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body class="lock-screen">
+  <div class="loading"></div>
+  <nav class="menu">
+  <div class="menu-close">
+    <i class="iconfont iconplus"></i>
+  </div>
+  <ul class="menu-content">
+    
+    
+    
+    
+    <li class="menu-item"><a href="/ "> 首页</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/archives "> 归档</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/tags "> 标签</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/categories "> 分类</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/about "> 关于</a></li>
+    
+  </ul>
+  <div class="menu-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="http://junanaa.gitee.io/">一只小安仔</a> .AllRightsReserved</p></div>
+</nav>
+  <main id="main">
+  <div class="container" id="container">
+    <article class="article">
+  <section class="head">
+  <img   class="lazyload" data-original="https://ssyerv1.oss-cn-hangzhou.aliyuncs.com/picture/02e226e25c924d4387c1f5653c952faf.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">js 精度丢失问题</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>2020-05-05</span
+        class="post-info-item">
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>7651</span>
+    </div>
+  </div>
+</section>
+  <section class="main">
+    <section class="content">
+      <h1 id="js-精度丢失问题"><a href="#js-精度丢失问题" class="headerlink" title="js 精度丢失问题"></a>js 精度丢失问题</h1><h3 id="最近很多小伙伴遇到js精度丢失的问题。这里简单分析和记录。"><a href="#最近很多小伙伴遇到js精度丢失的问题。这里简单分析和记录。" class="headerlink" title="最近很多小伙伴遇到js精度丢失的问题。这里简单分析和记录。"></a>最近很多小伙伴遇到js精度丢失的问题。这里简单分析和记录。</h3><h1 id="何为js精度丢失问题？"><a href="#何为js精度丢失问题？" class="headerlink" title="何为js精度丢失问题？"></a>何为js精度丢失问题？</h1><blockquote>
+<p>在你的浏览器console试试如下代码：</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-number">0.1</span> + <span class="hljs-number">0.2</span> != <span class="hljs-number">0.3</span>    <span class="hljs-comment">// true</span><br><span class="hljs-number">9999999999999999</span> === <span class="hljs-number">10000000000000001</span> <span class="hljs-comment">// true</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>JS 遵循 IEEE 754 规范，采用双精度存储（double precision），占用 <strong>64 bit</strong>。1位用来表示符号位，11位用来表示指数，52位表示尾数。因此 JS 中能精准表示的最大整数是 Math.pow(2, 53)，十进制即 9007199254740992。  </p>
+</blockquote>
+<blockquote>
+<p>如果超过 9007199254740992 会如何，试试如下代码：</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">var</span> a = <span class="hljs-number">900719925474099299999</span><br><span class="hljs-built_in">console</span>.log(a)          <span class="hljs-comment">// 900719925474099300000</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="这是最近遇到的业务问题："><a href="#这是最近遇到的业务问题：" class="headerlink" title="这是最近遇到的业务问题："></a>这是最近遇到的业务问题：</h1><blockquote>
+<p>我后端有个 Long 型的 orderId（订单号） 字段，值为 1183572432896790528 ，前端通过 axios 发起 ajax 请求获取到的数据却是 1183572432896790500 ，导致前端无法通过真实的订单号去后端获取数据。<br>于是开始怀疑是axios的问题，去文档查，发现一个axios请求时的参数如下：<br><img   class="lazyload" data-original="https://www.anlazy.top/usr/uploads/2019/12/1981450135.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="axios"><br>这个参数的意思是在 axios 回调 then 和 catch 之前可以对数据进行操作，如果不加这个参数，它也<strong>有默认的</strong>，我们开始怀疑是它默认的骚操作把数据给我们搞破坏了。于是自己加上来防止它默认的起作用。我们进行如下的操作：</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs js">ego.http(&#123;<br>       url:<span class="hljs-string">"/order/order/list?"</span>+ ego.stringify(<span class="hljs-keyword">this</span>.query),<br>       method: <span class="hljs-string">'get'</span>,<br>       transformResponse: [<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">data</span>) </span>&#123;<br>           <span class="hljs-keyword">return</span> data;<br>       &#125;],<br>   &#125;).then(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> &#123;<br>       data = data.data<br>       <span class="hljs-keyword">this</span>.orders = data.items<br>       <span class="hljs-keyword">this</span>.totalPage = data.totalPage<br>       <span class="hljs-keyword">this</span>.total = data.total<br>   &#125;).catch(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">this</span>.orders = [])<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>也就是你什么也不做，直接返回数据。<br>自然，js精度丢失并没有解决。我们需要思考，如果不加这句话 axios 默认做了什么？根据我的测试结果，它默认将后端传来的json字符串转成了json对象，然后放在响应的data里面。说白了，它默认帮我们 JSON.parse(data)。你想嘛，<strong>后端传来的是json字符串</strong>嘛。你可以觉得它帮我们解析了这个json字符串。 </p>
+</blockquote>
+<blockquote>
+<p>这下我开始怀疑是 JSON.parse  的问题，后来想明白了 js 进度丢失问题。（如文章最开始所陈述的）  </p>
+</blockquote>
+<h1 id="那么问题来了，这咋个解决？"><a href="#那么问题来了，这咋个解决？" class="headerlink" title="那么问题来了，这咋个解决？"></a>那么问题来了，这咋个解决？</h1><blockquote>
+<p>我想到的思路只有一个，把 Long 值转成 String 类型。你有什么好办法可以分享哦！<br>现在无非是在前端开始后端转？如果在前端，可以使用 在 axios 的 transformResponse 里面写逻辑嘛，但我作为一个后端程序员，肯定还是更愿意在后端想办法，比较前端的法子治标不治本。咱们从根源解决。</p>
+</blockquote>
+<h1 id="后端解决方案："><a href="#后端解决方案：" class="headerlink" title="后端解决方案："></a>后端解决方案：</h1><blockquote>
+<p>后端这块我们使用的 jackson 做转换器。先是想到了配置，做个全局的，把所有遇到的 Long 值转成 String ，一劳永逸！但是有些问题，下面说。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MvcConfig</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">WebMvcConfigurer</span> </span>&#123;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">extendMessageConverters</span><span class="hljs-params">(List&lt;HttpMessageConverter&lt;?&gt;&gt; converters)</span> </span>&#123;<br>        MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = <span class="hljs-keyword">new</span> MappingJackson2HttpMessageConverter();<br>        ObjectMapper objectMapper = jackson2HttpMessageConverter.getObjectMapper();<br>        <span class="hljs-comment">// 不显示为null的字段</span><br>        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);<br>        SimpleModule simpleModule = <span class="hljs-keyword">new</span> SimpleModule();<br>        simpleModule.addSerializer(Long<span class="hljs-class">.<span class="hljs-keyword">class</span>, <span class="hljs-title">ToStringSerializer</span>.<span class="hljs-title">instance</span>)</span>;     <span class="hljs-comment">// json 序列化时 Long 转 String</span><br>        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);      <span class="hljs-comment">// json 序列化时 Long 转 String</span><br>        objectMapper.registerModule(simpleModule);<br><br>        jackson2HttpMessageConverter.setObjectMapper(objectMapper);<br>        <span class="hljs-comment">//放到第一个</span><br>        converters.add(<span class="hljs-number">0</span>, jackson2HttpMessageConverter);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这个办法百度时最多。虽然一劳永逸，但是我并不希望全部转，比方说价格，数量这些字段。（价格是因为我们数据库存的是是整数，前端会把小数点左移两位。）数量和价格前端还需要做一些计算，再转换也麻烦！<br><img   class="lazyload" data-original="https://www.anlazy.top/usr/uploads/2019/12/2451671564.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="js精度问题"></p>
+</blockquote>
+<blockquote>
+<p>那么我们需要做某些字段自定义转换。很久以前经过大量百度和询问大佬，找到一个叫 @JsonSerialize 的注解，它还有个哥们 @JsonDeserialize，一个是 json 序列化器，一个是 json 反序列化器。他们作用在字段上。这两个注解有个叫 using 的参数，可以指定自定义实现的序列化器和反序列化器。<br>如下是我针对js精度问题写的序列化器：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> junan</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@version</span> V1.0</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@className</span> LongToStringSerializer</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@disc</span></span><br><span class="hljs-comment"> * <span class="hljs-doctag">@date</span> 2019/12/27 16:14</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LongToStringSerializer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">JsonSerializer</span>&lt;<span class="hljs-title">Long</span>&gt; </span>&#123;<br>    <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">serialize</span><span class="hljs-params">(Long aLong, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)</span> <span class="hljs-keyword">throws</span> IOException </span>&#123;<br>        jsonGenerator.writeString(aLong.toString());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>作用在字段上：</p>
+</blockquote>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Data</span><br><span class="hljs-variable">@Table</span>(name = <span class="hljs-string">"tb_order"</span>)<br>public class Order &#123;<br><br>    <span class="hljs-variable">@Id</span><br>    <span class="hljs-variable">@JsonSerialize</span>(using = LongToStringSerializer.class)<br>    private Long orderId;<span class="hljs-comment">// id</span><br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如此，在 jackson 进行序列这个类的对象时，会将 orderId 这个字段以字符串类型写入 json ，发给前端了。</p>
+</blockquote>
+<h1 id="补充："><a href="#补充：" class="headerlink" title="补充："></a>补充：</h1><blockquote>
+<p>其实 @JsonSerialize 和 @JsonDeserialize 还有其他作用哦，比方说我第一次使用它时，用来解决 unix 时间戳转成时间格式化字符串。当时我数据库存的unix时间戳，如 1577440564 ， 它是一个 10 位的 int 数，我个人认为操作以时间来数据库时，它会更快。但是前端需要格式化好的时间字符串，如 1997-01-01 12:05:10 ，当时我对每个对象使用beanutils工具是一个字段一个字段copy，想想真的痛苦，有了 @JsonSerialize ，简直爱不释手。<br>代码如下，用法类似上面的：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> junan</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@version</span> V1.0</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@className</span> UnixConverterSerializer</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@disc</span></span><br><span class="hljs-comment"> * <span class="hljs-doctag">@date</span> 2019/11/30 22:09</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UnixConverterSerializer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">JsonSerializer</span>&lt;<span class="hljs-title">Integer</span>&gt; </span>&#123;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">serialize</span><span class="hljs-params">(Integer integer, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)</span> <span class="hljs-keyword">throws</span> IOException </span>&#123;<br>        String s = TimeUtil.timeStampToDate(String.valueOf(integer), <span class="hljs-keyword">null</span>);<br>        jsonGenerator.writeString(s);<br>    &#125;<br><br>&#125;<br><br><br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> junan</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@version</span> V1.0</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@className</span> UnixConverterDeSerializer</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@disc</span></span><br><span class="hljs-comment"> * <span class="hljs-doctag">@date</span> 2019/11/30 23:41</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UnixConverterDeSerializer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">JsonDeserializer</span>&lt;<span class="hljs-title">Integer</span>&gt; </span>&#123;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Integer <span class="hljs-title">deserialize</span><span class="hljs-params">(JsonParser jsonParser, DeserializationContext deserializationContext)</span> <span class="hljs-keyword">throws</span> IOException, JsonProcessingException </span>&#123;<br>        String text = jsonParser.getText();<br>        <span class="hljs-keyword">return</span> Integer.valueOf(TimeUtil.simpleDateTotimeStamp(text));<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>他们好像用到了 TimeUtil ，代码有点丑，凑合用:</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * unix时间戳转换工具类</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> junan</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TimeUtil</span> </span>&#123;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 日期格式1</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String DETA_FORMAT_1 = <span class="hljs-string">"yyyy-MM-dd HH:mm:ss"</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 日期格式2</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String DETA_FORMAT_2 = <span class="hljs-string">"yyyy-MM-dd"</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 日期格式3</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String DETA_FORMAT_3 = <span class="hljs-string">"yyyy年MM月dd日"</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 日期格式2</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String DETA_FORMAT_4 = <span class="hljs-string">"yyyyMMdd"</span>;<br><br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 获取时间戳 单位秒</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">long</span> <span class="hljs-title">getTimeStamp</span><span class="hljs-params">()</span></span>&#123;<br>        <span class="hljs-keyword">return</span> System.currentTimeMillis()/<span class="hljs-number">1000</span>;<br>    &#125;<br><br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 时间戳转日期</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> timeStamp</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> format</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">timeStampToDate</span><span class="hljs-params">(String timeStamp,String format)</span></span>&#123;<br><br>        <span class="hljs-keyword">if</span>(timeStamp.isEmpty() || timeStamp == <span class="hljs-keyword">null</span> || timeStamp.equals(<span class="hljs-string">"null"</span>))<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>;<br>        <span class="hljs-keyword">if</span>(format == <span class="hljs-keyword">null</span> || format.isEmpty())<br>            format = <span class="hljs-string">"yyyy-MM-dd HH:mm:ss"</span>;<br>        SimpleDateFormat sdf = <span class="hljs-keyword">new</span> SimpleDateFormat(format);<br><br>        <span class="hljs-keyword">return</span> sdf.format(<span class="hljs-keyword">new</span> Date(Long.valueOf(timeStamp+<span class="hljs-string">"000"</span>)));<br><br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 时间戳转日期</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> timeStamp</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> format</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">timeStampToSimpleDate</span><span class="hljs-params">(String timeStamp,String format)</span></span>&#123;<br><br>        <span class="hljs-keyword">if</span>(timeStamp.isEmpty() || timeStamp == <span class="hljs-keyword">null</span> || timeStamp.equals(<span class="hljs-string">"null"</span>))<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>;<br>        <span class="hljs-keyword">if</span>(format == <span class="hljs-keyword">null</span> || format.isEmpty())<br>            format = <span class="hljs-string">"yyyy-MM-dd"</span>;<br>        SimpleDateFormat sdf = <span class="hljs-keyword">new</span> SimpleDateFormat(format);<br><br>        <span class="hljs-keyword">return</span> sdf.format(<span class="hljs-keyword">new</span> Date(Long.valueOf(timeStamp+<span class="hljs-string">"000"</span>)));<br><br>    &#125;<br><br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 日期转时间戳</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> date</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> format</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">dateTotimeStamp</span><span class="hljs-params">(String date,String format)</span></span>&#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            SimpleDateFormat sdf = <span class="hljs-keyword">new</span> SimpleDateFormat(format);<br>            <span class="hljs-keyword">return</span> String.valueOf(sdf.parse(date).getTime()/<span class="hljs-number">1000</span>);<br>        &#125; <span class="hljs-keyword">catch</span> (ParseException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>        <span class="hljs-keyword">return</span>  <span class="hljs-string">""</span>;<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 日期转时间戳</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> date</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">simpleDateTotimeStamp</span><span class="hljs-params">(String date)</span></span>&#123;<br>        <span class="hljs-keyword">return</span> dateTotimeStamp(date, DETA_FORMAT_1);<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 日期转时间戳</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> date</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Integer <span class="hljs-title">dateToStampWithSimple</span><span class="hljs-params">(String date)</span></span>&#123;<br>        <span class="hljs-keyword">return</span> Integer.valueOf(dateTotimeStamp(date, DETA_FORMAT_2));<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 返回当前年月日（yyMMdd）</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">getDate</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> timeStampToSimpleDate(String.valueOf(getTimeStamp()), DETA_FORMAT_4);<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+    </section>
+    <section class="extra">
+      
+      
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li></ul>
+
+      
+<nav class="nav">
+  
+    <a href="/2020/05/05/9%20%E4%B8%80%E4%BA%9B%E7%A7%81%E8%97%8F%E7%9A%84%E5%B7%A5%E5%85%B7%E6%88%96%E7%BD%91%E7%AB%99%E5%88%86%E4%BA%AB%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/"><i class="iconfont iconleft"></i>一些私藏的工具或网站分享（持续更新）</a>
+  
+  
+    <a href="/2020/05/05/8%20spring%20security%20+%20oauth2%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E3%80%82/">spring security + oauth2实现登录。<i class="iconfont iconright"></i></a>
+  
+</nav>
+
+    </section>
+    
+      <section class="comments">
+        
+          <div class="btn" id="comments-btn">查看评论</div>
+        
+        
+<div id="valine"></div>
+<script defer src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+  window.onload = function () {
+    var loadValine = function () {
+      new Valine({
+        el: '#valine',
+        app_id: "a8aBoMUoOnc1VQB8luHmCH4Y-gzGzoHsz",
+        app_key: "EEUcoQEF0g8aC9y8tqj1koxE",
+        placeholder: "大爷来玩呀~",
+        avatar: "mp",
+        pageSize: "10",
+        lang: "zh-CN",
+      });
+    }
+    if ( true ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        loadValine();
+      });
+    } else {
+      loadValine();
+    }
+  };
+</script>
+
+      </section>
+    
+  </section>
+</article>
+  </div>
+</main>
+  <footer class="footer">
+  <div class="footer-social">
+    
+    
+    
+    
+    
+    <a href="tencent://message/?Menu=yes&uin=1286890175 " target="_blank" onMouseOver="this.style.color= '#12B7F5'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconQQ "></i>
+    </a>
+    
+    
+    
+    
+    
+    <a href="javascript:; " target="_blank" onMouseOver="this.style.color= '#09BB07'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconwechat-fill "></i>
+    </a>
+    
+    
+    
+    
+    
+    <a href="mailto:chenjunan_2018@163.com " target="_blank" onMouseOver="this.style.color='#FFBE5B'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconmail"></i>
+    </a>
+    
+  </div>
+  <div class="footer-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="http://junanaa.gitee.io/">一只小安仔</a> .AllRightsReserved</p></div>
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  <div class="fab fab-menu">
+    <i class="iconfont iconmenu"></i>
+  </div>
+  
+</body>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+
+<script src="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/justifiedGallery/3.7.0/js/jquery.justifiedGallery.min.js"></script>
+
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+<script>
+  (function () {
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    } else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</html>

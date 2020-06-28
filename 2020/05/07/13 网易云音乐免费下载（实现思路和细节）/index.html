@@ -1,0 +1,446 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>网易云音乐免费下载（实现思路和细节） - 一只小安仔</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+
+  
+  <meta name="keywords" content="一只小安仔,"> 
+  
+  <meta name="description" content="网易云音乐免费下载（实现思路和细节）起因
+事情要从一个..."> 
+  
+  <meta name="author" content="junan"> 
+
+  
+    <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  
+  
+    <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  
+  
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  
+  
+    <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_58xq2j9v1id.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xcode.min.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/justifiedGallery/3.7.0/css/justifiedGallery.min.css">
+
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {}
+    CONFIG = {
+      fancybox: true,
+      pjax: false,
+      lazyload: {
+        enable: true,
+        loadingImage: '/images/theme/loading.gif',
+      },
+      donate_alipay: '',
+      donate_wechat: '',
+      motto: {
+        api: '',
+        default: '夜半花落听雨声，不自欢喜不自愁。'
+      },
+      galleries: {
+        enable: 'true'
+      },
+      fab: {
+        enable: 'true',
+        alwaysShow: 'false'
+      }
+    }
+  </script>
+
+  
+
+  
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body class="lock-screen">
+  <div class="loading"></div>
+  <nav class="menu">
+  <div class="menu-close">
+    <i class="iconfont iconplus"></i>
+  </div>
+  <ul class="menu-content">
+    
+    
+    
+    
+    <li class="menu-item"><a href="/ "> 首页</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/archives "> 归档</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/tags "> 标签</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/categories "> 分类</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/about "> 关于</a></li>
+    
+  </ul>
+  <div class="menu-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="http://junanaa.gitee.io/">一只小安仔</a> .AllRightsReserved</p></div>
+</nav>
+  <main id="main">
+  <div class="container" id="container">
+    <article class="article">
+  <section class="head">
+  <img   class="lazyload" data-original="http://pic.netbian.com/uploads/allimg/180826/113958-153525479855be.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">网易云音乐免费下载（实现思路和细节）</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>2020-05-07</span
+        class="post-info-item">
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>12967</span>
+    </div>
+  </div>
+</section>
+  <section class="main">
+    <section class="content">
+      <h1 id="网易云音乐免费下载（实现思路和细节）"><a href="#网易云音乐免费下载（实现思路和细节）" class="headerlink" title="网易云音乐免费下载（实现思路和细节）"></a>网易云音乐免费下载（实现思路和细节）</h1><h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><blockquote>
+<p>事情要从一个月前说起，我妈答应了别人帮他下载一些音乐到手机内存卡，妈自己觉得麻烦，于是喊我下，我溜达完一圈发现，市面的音乐平台下载音乐都是要VIP资格的。</p>
+</blockquote>
+<h2 id="然后"><a href="#然后" class="headerlink" title="然后"></a>然后</h2><blockquote>
+<p>然后发现了一个网站 <a href="https://music.zhuolin.wang/" target="_blank" rel="noopener">VIP会员付费音乐解析下载网</a> ，这个网站搜索音乐、在线播放，但是下载的话会打开文件链接，不会自动下载，需要手动保存音乐文件，并且保存的文件名字是随机字符串的，这让我很难受。如下，是李荣浩的《麻雀》<br><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409124105603.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="资源文件链接"><br><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409124309810.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="下载的资源文件"></p>
+</blockquote>
+<h2 id="再然后"><a href="#再然后" class="headerlink" title="再然后"></a>再然后</h2><blockquote>
+<p>再然后，我想着我直接写一个界面，后端去调用他家的接口拿数据并把下载做个集成，当然下载的文件改名为 歌名 - 歌手.mp3 的格式是十分必要的，还有就是需要一个批量下载的功能，这也是十分重要的。</p>
+</blockquote>
+<blockquote>
+<p>这件事做的也还比较顺，因为他家的接口还是很好理解的，接口，参数，返回的数据格式类型，一眼便知。<br>比如搜索接口：POST   <a href="https://music.zhuolin.wang/api.php" target="_blank" rel="noopener">https://music.zhuolin.wang/api.php</a><br>参数：<img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409125355502.png#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="参数"><br>返回数据：<img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409125506992.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="返回数据"><br>接口简单，后端我使用spring的RestTemplate去接口拿数据也是顺风顺水，我简单的写两个前端来显示数据，为了简化开发，我使用的非前后端分离的方式，就写了一个index.html ，但是用到了vue + elementui，所有的资源文件和图片均来自于网上。界面如下<br><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409130257786.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="前端设计"><br>在后端方面我实现了下下载和批量下载，目前只是开发了网易云的音乐下载，所以资源文件的接口是 <a href="http://music.163.com/song/media/outer/url?(歌曲id).mp3，使用简单的io流技术即可实现。如下是单曲下载的实现：" target="_blank" rel="noopener">http://music.163.com/song/media/outer/url?(歌曲id).mp3，使用简单的io流技术即可实现。如下是单曲下载的实现：</a></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br>   <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">downLoadMusic</span><span class="hljs-params">(Song song)</span> </span>&#123;<br>       <span class="hljs-comment">// check 文件夹存在</span><br>       <span class="hljs-keyword">if</span>(!isExist) &#123;<br>           File file = <span class="hljs-keyword">new</span> File(systemProperties.getDOWNLOAD_PATH());<br>           <span class="hljs-keyword">if</span>(!file.isDirectory())<br>               file.mkdirs();<br>           isExist = <span class="hljs-keyword">true</span>;<br>       &#125;<br>       String url = MUSIC_163_DOWNLOAD_URL + <span class="hljs-string">"?id="</span> + song.getId() + <span class="hljs-string">".mp3"</span>;<br>       ResponseEntity&lt;<span class="hljs-keyword">byte</span>[]&gt; forEntity = restTemplate.getForEntity(url, <span class="hljs-keyword">byte</span>[]<span class="hljs-class">.<span class="hljs-keyword">class</span>)</span>;<br>       <span class="hljs-keyword">if</span>(forEntity.getStatusCode() == HttpStatus.OK) &#123;<br>           <span class="hljs-keyword">byte</span>[] body = forEntity.getBody();<br>           <span class="hljs-keyword">try</span> &#123;<br>               StringBuilder builder = <span class="hljs-keyword">new</span> StringBuilder(systemProperties.getDOWNLOAD_PATH())<br>                       .append(<span class="hljs-string">"\\"</span>)<br>                       .append(song.getName().replaceAll(<span class="hljs-string">"\\\\"</span>, <span class="hljs-string">"\\\\\\\\"</span>))<br>                       .append(<span class="hljs-string">"-"</span>)<br>                       .append(song.getAr().get(<span class="hljs-number">0</span>).getName())<br>                       .append(<span class="hljs-string">".mp3"</span>);<br>               FileOutputStream fileOutputStream = <span class="hljs-keyword">new</span> FileOutputStream(<span class="hljs-keyword">new</span> File(builder.toString()));<br>               fileOutputStream.write(body);<br>               fileOutputStream.close();<br>               <span class="hljs-keyword">return</span> <span class="hljs-string">"歌曲 "</span> + song.getName() + <span class="hljs-string">" 已经下载在本地"</span> + systemProperties.getDOWNLOAD_PATH() + <span class="hljs-string">"目录！"</span>;<br>           &#125; <span class="hljs-keyword">catch</span> (FileNotFoundException e) &#123;<br>               e.printStackTrace();<br>           &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>               e.printStackTrace();<br>           &#125;<br>       &#125;<br>       <span class="hljs-keyword">return</span> <span class="hljs-string">"0"</span>;<br>   &#125;<br></code></pre></td></tr></table></figure>
+<h2 id="再然后-1"><a href="#再然后-1" class="headerlink" title="再然后"></a>再然后</h2><blockquote>
+<p>这家的接口完成单曲的下载基本没有什么问题。但后来我发现一首一首搜索下载还是太过于麻烦，我希望能对歌单里的歌曲直接下载。但随之而来也产生了问题，这家的兄弟没有提供歌单搜索的接口。而且一个长远的问题也困扰与我，我不知道这家网站能运行多久。如果他挂了，我做的努力不是白费了。</p>
+</blockquote>
+<blockquote>
+<p>于是我需要改变战略，直接去调用网易云的接口。大厂一时半会也不会挂。而且接口肯定全面。</p>
+</blockquote>
+<h2 id="网易云接口分析"><a href="#网易云接口分析" class="headerlink" title="网易云接口分析"></a>网易云接口分析</h2><blockquote>
+<p>首先我们需要分析搜索的接口，当然前提是先找到这个接口，从数不清的请求中我找到了这个接口：<br><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409133111924.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="真实接口"><br>注意区别于另一个接口，我一开始弄混了，整了了半天。<br><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/2020040913323065.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="词条提示的接口"><br>url上的 csrf_token 是用来保障账户安全的，目前我们不做登录，这个参数我们不管它。</p>
+</blockquote>
+<blockquote>
+<p>再往下就是参数了： <img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409134007879.png#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="请求的参数"><br>params和encSecKey参数一看就知道是加密了的，这说明它发起这个请求前把我们输入的搜索内容加密了。如果我们希望调用这个接口，就必须知道是如何加密的。当然，如果你去看了其他一些接口，都有这两个参数，且都需要加密。所以了解这两参数的加密方式是调用网易云音乐大部分接口所必需的。</p>
+</blockquote>
+<h2 id="params和encSecKey如何加密的"><a href="#params和encSecKey如何加密的" class="headerlink" title="params和encSecKey如何加密的"></a>params和encSecKey如何加密的</h2><blockquote>
+<p>我们需要先找到对这两参数加密的js文件，params作为搜索条件的话不太适合（很多js文件都用到了），所以我们选择encSecKey作为搜索条件。我们发现只在一个js文件中找到：<br><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409135129427.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="js文件位置"><br>我们把这个文件保存到本地，由于这个文件是压缩版，不太好看，我们进行格式化再看，发现有三处存在encSecKey：<br>第一处：<br><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/2020040913575337.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="第一处"><br>第二三处：<br><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409135814983.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="在这里插入图片描述"></p>
+</blockquote>
+<blockquote>
+<p>我们大致能看出第二三处好像就是在给params和encSecKey设置值，值来源于bVj7c对象，而bVj7c又指向window.asrsea函数，您可别马上以为这个函数是window自带的，可不是的，通过我们对window.asrsea的搜索，发现在第一处的d函数的下方有这么一句代码：<br><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409140627363.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="window.asrsea"><br>说了半天，秘密都在这个d函数，d喊出最终返回h，这个h的encText就是params参数，encSecKey就是encSecKey参数。</p>
+</blockquote>
+<h3 id="d函数分析"><a href="#d函数分析" class="headerlink" title="d函数分析"></a>d函数分析</h3><blockquote>
+<p>首先我们需要先知道d函数的四个参数是什么，怎么知道呢？看看呗，怎么看呢？<br>我们把下载的源文件的d函数中加入打印这四个参数的代码。注意是在下载的源文件中，因为害怕格式化破坏了然后出些幺蛾子。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-built_in">console</span>.log(<span class="hljs-string">'d='</span> + d);<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'e='</span> + e);<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'f='</span> + f);<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'g='</span> + g);<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>接下来我们需要把网易云返回的这个js文件替换为我们修改后的。直接通过浏览器进行替换我尝试了好像不行，所以我们需要用到抓包工具进行替换，我这里使用charles（花瓶），网上也有人使用fiddler，您可以自己选择。<br><a href="https://pan.baidu.com/s/1Okn2JlHnHjNl0qxCpW6XDQ" target="_blank" rel="noopener">这里</a>是charles的百度云资源，破解方式请【<a href="https://www.cnblogs.com/nicece/p/10019872.html" target="_blank" rel="noopener">参考</a>】，不破解30分钟后自动关闭，这点很蛋疼。</p>
+</blockquote>
+<h4 id="抓包工具配置"><a href="#抓包工具配置" class="headerlink" title="抓包工具配置"></a>抓包工具配置</h4><blockquote>
+<p> 抓包工具需要用到代理方式，打开windows电脑进行设置：</p>
+<p> <img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409145121446.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="设置代理"></p>
+</blockquote>
+<blockquote>
+<p>打开charles，安装证书（为了能看到抓到的资源，否则显示unknow，不安装没法后续）：<br>Help -&gt; SSL Proxying -&gt; Install Charles root Certificate</p>
+</blockquote>
+<p>  <img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409145210927.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="安装证书"><br><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/202004091452534.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="安装证书"></p>
+<p><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409145330120.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="在这里插入图片描述"></p>
+<blockquote>
+<p>之后下一步完成即可。</p>
+</blockquote>
+<blockquote>
+<p>然后浏览器禁用缓存，并刷新网易云音乐网站。<br>charles中就能看到各种网易云的请求：</p>
+</blockquote>
+<p> <img   class="lazyload" data-original="https://img-blog.csdnimg.cn/2020040914585288.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="charles查看请求"></p>
+<h4 id="替换js文件"><a href="#替换js文件" class="headerlink" title="替换js文件"></a>替换js文件</h4><p> <img   class="lazyload" data-original="https://img-blog.csdnimg.cn/2020040915015023.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="替换js文件"><br><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409150348721.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="替换js文件"></p>
+<h3 id="d函数传入参数都是啥"><a href="#d函数传入参数都是啥" class="headerlink" title="d函数传入参数都是啥"></a>d函数传入参数都是啥</h3><blockquote>
+<p>我们对网易云网站再次刷新，并查看控制台:</p>
+</blockquote>
+<p><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409150831816.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="参数查看"></p>
+<blockquote>
+<p><strong>结论:经过多次测试，我们发现，除了d参数对不同请求变化，其他e、f、g参数均不发生变化（即为固定值）。</strong> </p>
+</blockquote>
+<blockquote>
+<p>再经过我的查找，发现发送搜索请求时的d参数为：{“hlpretag”:”&lt;span class=&quot;s-fc7&quot;&gt;”,”hlposttag”:”</span>“,”#/“:””,”s”:”麻雀”,”type”:”1”,”offset”:”0”,”total”:”true”,”limit”:”30”,”csrf_token”:””}<br>其中我大概明白s为搜索的内容，type应该为搜索方式（1为单曲搜索），limit为搜索条数。其他参数可以<a href="https://github.com/MiChongGET/CloudMusicApi" target="_blank" rel="noopener">参考</a></p>
+</blockquote>
+<h4 id="回到d函数本身"><a href="#回到d函数本身" class="headerlink" title="回到d函数本身"></a>回到d函数本身</h4><p><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/2020040913575337.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="d函数本身"></p>
+<blockquote>
+<p>i = a(16) 这个i经过测试发现是一个随机的16位字符串，然后你发现encText（即params参数）两次调用b函数。b函数如下：<br><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409152315671.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="b函数"><br>您不需要完全懂它，它大致是一个aes加密算法，CBC模式，偏移量为固定值：0102030405060708 </p>
+</blockquote>
+<blockquote>
+<p>再看encSecKey是经过c函数产生。并传入i，e，f。之前说过了，e，f是固定值，那么如果i我们不让它为随机值，让它也为固定值，那岂不是encSecKey的值便固定了。</p>
+</blockquote>
+<blockquote>
+<p>大胆猜测，大胆尝试，继续编辑之前的js文件把i值改为 FFFFFFFFFFFFFFFF（即16个F）</p>
+</blockquote>
+<p> <img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409154134804.png#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="替换i为固定值"> </p>
+<blockquote>
+<p>测试数据搜索麻雀：</p>
+</blockquote>
+<p><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409155344410.png#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="麻雀参数"></p>
+<blockquote>
+<p>测试数据搜索小安：<br><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409155535167.png#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="小安参数"><br><strong>根据测试发现encSecKey值未发生改变，数据也成功获取。说明i值可以固定。</strong></p>
+</blockquote>
+<h3 id="java代码实现加密"><a href="#java代码实现加密" class="headerlink" title="java代码实现加密"></a>java代码实现加密</h3><blockquote>
+<p>我们的主要问题就是params的产生了，之前说过它使用了aes算法，CBC模式，偏移量为0102030405060708 ，java代码实现如下：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs java"> <span class="hljs-comment">/**</span><br><span class="hljs-comment"> * aes 加密偏移量</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String ivParameter = <span class="hljs-string">"0102030405060708"</span>;<br><br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * aes加密</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> content</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> key</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">AESEncrypt</span><span class="hljs-params">(String content, String key)</span> </span>&#123;<br>    <span class="hljs-keyword">try</span> &#123;<br>        <span class="hljs-keyword">byte</span>[] byteContent = content.getBytes(<span class="hljs-string">"UTF-8"</span>);<br>        <span class="hljs-comment">//获取cipher对象("算法/工作模式/填充模式")</span><br>        Cipher cipher = Cipher.getInstance(<span class="hljs-string">"AES/CBC/PKCS5Padding"</span>);<br>        <span class="hljs-comment">//采用AES方式将密码转化成密钥</span><br>        SecretKeySpec secretKeySpec = <span class="hljs-keyword">new</span> SecretKeySpec(key.getBytes(), <span class="hljs-string">"AES"</span>);<br>        <span class="hljs-comment">//初始化偏移量</span><br>        IvParameterSpec iv = <span class="hljs-keyword">new</span> IvParameterSpec(ivParameter.getBytes());<br>        <span class="hljs-comment">//cipher对象初始化（“加密/解密,密钥，偏移量”）</span><br>        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, iv);<br>        <span class="hljs-comment">//数据处理</span><br>        <span class="hljs-keyword">byte</span>[] encryptedBytes = cipher.doFinal(byteContent);<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> String(Base64Utils.encode(encryptedBytes), <span class="hljs-string">"UTF-8"</span>);<br>    &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>        e.printStackTrace();<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>encSecKey值是固定的，所以：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * encSecKey这个值经测试是不变的，直接抄下来</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">getEncSecKey</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">"257348aecb5e556c066de214e531faadd1c55d814f9be95fd06d6bff9f4c7a41f831f6394d5a3fd2e3881736d94a02ca919d952872e7d0a50ebfa1769a7a62d512f5f1ca21aec60bc3819a9c3ffca5eca9a0dba6d6f7249b06f5965ecfff3695b54e1c28f3f624750ed39e7de08fc8493242e26dbc4484a01c76f739e135637c"</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>d函数是对 encText（即params） 加密两次，所以：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 对数据两次加密获得参数params</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> content 该参数应当是个json串  例如：&#123;"s":"hello","csrf_token":"952d1c697b8d0647e8c7f19c16a0f753"&#125;</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> key 该参数是d方法的最后一个参数 例如：0CoJUm6Qyw8W8jud</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">getParams</span><span class="hljs-params">(String content, String key)</span> </span>&#123;<br>    <span class="hljs-comment">// 第一次加密</span><br>    String s = AESEncrypt(content, key);<br>    <span class="hljs-comment">// 第二次加密 </span><br>    <span class="hljs-keyword">return</span> AESEncrypt(s, <span class="hljs-string">"FFFFFFFFFFFFFFFF"</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>搜索单曲的话应该是:</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 搜索单曲</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> searchValue</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> MusicParams <span class="hljs-title">getMusicParams</span><span class="hljs-params">(String searchValue)</span> </span>&#123;<br>    MusicParams musicParams = <span class="hljs-keyword">new</span> MusicParams();<br>    musicParams.setParams(getParams(<span class="hljs-string">"&#123;\"hlpretag\":\"&lt;span class=\\\"s-fc7\\\"&gt;\",\"hlposttag\":\"&lt;/span&gt;\",\"#/\":\"\",\"s\":\""</span>+ searchValue +<span class="hljs-string">"\",\"type\":\"1\",\"offset\":\"0\",\"total\":\"true\",\"limit\":\"30\",\"csrf_token\":\"\"&#125;"</span>, d_params4));<br>    musicParams.setEncSecKey(getEncSecKey());<br>    <span class="hljs-keyword">return</span> musicParams;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>搜索歌单的话：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 搜索歌单</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> searchValue</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> MusicParams <span class="hljs-title">getPlsyListParams</span><span class="hljs-params">(String searchValue)</span> </span>&#123;<br>    MusicParams musicParams = <span class="hljs-keyword">new</span> MusicParams();<br>    musicParams.setParams(getParams(<span class="hljs-string">"&#123;\"hlpretag\":\"&lt;span class=\\\"s-fc7\\\"&gt;\",\"hlposttag\":\"&lt;/span&gt;\",\"#/search/m\":\"\",\"s\":\""</span>+ searchValue +<span class="hljs-string">"\",\"type\":\"1000\",\"offset\":\"0\",\"total\":\"true\",\"limit\":\"30\",\"csrf_token\":\"\"&#125;"</span>, d_params4));<br>    musicParams.setEncSecKey(getEncSecKey());<br>    <span class="hljs-keyword">return</span> musicParams;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>搜索单曲信息的话：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 获取单曲信息</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> id 歌曲ID</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> MusicParams <span class="hljs-title">getSongParams</span><span class="hljs-params">(Long id)</span> </span>&#123;<br>    MusicParams musicParams = <span class="hljs-keyword">new</span> MusicParams();<br>    musicParams.setParams(getParams(<span class="hljs-string">"&#123;\"id\":\""</span>+ id +<span class="hljs-string">"\",\"c\":\"[&#123;\\\"id\\\":\\\""</span>+ id +<span class="hljs-string">"\\\"&#125;]\",\"csrf_token\":\"\"&#125;"</span>, d_params4));<br>    musicParams.setEncSecKey(getEncSecKey());<br>    <span class="hljs-keyword">return</span> musicParams;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>以下是整个AESUtil的全部代码</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> junan</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@version</span> V1.0</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@className</span> AESUtil</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@disc</span> 该类用于生成网易云音乐请求参数</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@date</span> 2020/4/8 0:53</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AESUtil</span> </span>&#123;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * d方法的第2个参数</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String d_params2 = <span class="hljs-string">"010001"</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * d方法的第3个参数</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String d_params3 = <span class="hljs-string">"00e0b509f6259df8642dbc35662901477df22677ec152b5ff68ace615bb7b725152b3ab17a876aea8a5aa76d2e417629ec4ee341f56135fccf695280104e0312ecbda92557c93870114af6c9d05c4f7f0c3685b7a46bee255932575cce10b424d813cfe4875d3e82047b97ddef52741d546b8e289dc6935b3ece0462db0a22b8e7"</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * d方法的第4个参数</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String d_params4 = <span class="hljs-string">"0CoJUm6Qyw8W8jud"</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * aes 加密偏移量</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String ivParameter = <span class="hljs-string">"0102030405060708"</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * aes加密</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> content</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> key</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">AESEncrypt</span><span class="hljs-params">(String content, String key)</span> </span>&#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-keyword">byte</span>[] byteContent = content.getBytes(<span class="hljs-string">"UTF-8"</span>);<br>            <span class="hljs-comment">//获取cipher对象，getInstance("算法/工作模式/填充模式")</span><br>            Cipher cipher = Cipher.getInstance(<span class="hljs-string">"AES/CBC/PKCS5Padding"</span>);<br>            <span class="hljs-comment">//采用AES方式将密码转化成密钥</span><br>            SecretKeySpec secretKeySpec = <span class="hljs-keyword">new</span> SecretKeySpec(key.getBytes(), <span class="hljs-string">"AES"</span>);<br>            <span class="hljs-comment">//初始化偏移量</span><br>            IvParameterSpec iv = <span class="hljs-keyword">new</span> IvParameterSpec(ivParameter.getBytes());<br>            <span class="hljs-comment">//cipher对象初始化 init（“加密/解密,密钥，偏移量”）</span><br>            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, iv);<br>            <span class="hljs-comment">//按照上面定义的方式对数据进行处理。</span><br>            <span class="hljs-keyword">byte</span>[] encryptedBytes = cipher.doFinal(byteContent);<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> String(Base64Utils.encode(encryptedBytes), <span class="hljs-string">"UTF-8"</span>);<br>        &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 对数据两次加密获得参数params</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> content 该参数应当是个json串  例如：&#123;"s":"hello","csrf_token":"952d1c697b8d0647e8c7f19c16a0f753"&#125;</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> key 该参数是d方法的最后一个参数 例如：0CoJUm6Qyw8W8jud</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">getParams</span><span class="hljs-params">(String content, String key)</span> </span>&#123;<br>        <span class="hljs-comment">// 第一次加密</span><br>        String s = AESEncrypt(content, key);<br>        <span class="hljs-comment">// 第二次加密</span><br>        <span class="hljs-keyword">return</span> AESEncrypt(s, <span class="hljs-string">"FFFFFFFFFFFFFFFF"</span>);<br>    &#125;<br><br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * encSecKey这个值经测试是不变的，直接抄一个</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">getEncSecKey</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">"257348aecb5e556c066de214e531faadd1c55d814f9be95fd06d6bff9f4c7a41f831f6394d5a3fd2e3881736d94a02ca919d952872e7d0a50ebfa1769a7a62d512f5f1ca21aec60bc3819a9c3ffca5eca9a0dba6d6f7249b06f5965ecfff3695b54e1c28f3f624750ed39e7de08fc8493242e26dbc4484a01c76f739e135637c"</span>;<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 搜索单曲</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> searchValue</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> MusicParams <span class="hljs-title">getMusicParams</span><span class="hljs-params">(String searchValue)</span> </span>&#123;<br>        MusicParams musicParams = <span class="hljs-keyword">new</span> MusicParams();<br>        musicParams.setParams(getParams(<span class="hljs-string">"&#123;\"hlpretag\":\"&lt;span class=\\\"s-fc7\\\"&gt;\",\"hlposttag\":\"&lt;/span&gt;\",\"#/\":\"\",\"s\":\""</span>+ searchValue +<span class="hljs-string">"\",\"type\":\"1\",\"offset\":\"0\",\"total\":\"true\",\"limit\":\"30\",\"csrf_token\":\"\"&#125;"</span>, d_params4));<br>        musicParams.setEncSecKey(getEncSecKey());<br>        <span class="hljs-keyword">return</span> musicParams;<br>    &#125;<br><br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 搜索歌单</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> searchValue</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> MusicParams <span class="hljs-title">getPlsyListParams</span><span class="hljs-params">(String searchValue)</span> </span>&#123;<br>        MusicParams musicParams = <span class="hljs-keyword">new</span> MusicParams();<br>        musicParams.setParams(getParams(<span class="hljs-string">"&#123;\"hlpretag\":\"&lt;span class=\\\"s-fc7\\\"&gt;\",\"hlposttag\":\"&lt;/span&gt;\",\"#/search/m\":\"\",\"s\":\""</span>+ searchValue +<span class="hljs-string">"\",\"type\":\"1000\",\"offset\":\"0\",\"total\":\"true\",\"limit\":\"30\",\"csrf_token\":\"\"&#125;"</span>, d_params4));<br>        musicParams.setEncSecKey(getEncSecKey());<br>        <span class="hljs-keyword">return</span> musicParams;<br>    &#125;<br><br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 获取单曲信息</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> id 歌曲ID</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> MusicParams <span class="hljs-title">getSongParams</span><span class="hljs-params">(Long id)</span> </span>&#123;<br>        MusicParams musicParams = <span class="hljs-keyword">new</span> MusicParams();<br>        musicParams.setParams(getParams(<span class="hljs-string">"&#123;\"id\":\""</span>+ id +<span class="hljs-string">"\",\"c\":\"[&#123;\\\"id\\\":\\\""</span>+ id +<span class="hljs-string">"\\\"&#125;]\",\"csrf_token\":\"\"&#125;"</span>, d_params4));<br>        musicParams.setEncSecKey(getEncSecKey());<br>        <span class="hljs-keyword">return</span> musicParams;<br>    &#125;<br><br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>以上基本是核心的东西吧，也算是对网易云接口的探索。<br>下面是一些接口数据的获取的核心代码（请结合项目看，我进行了一些封装）：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> List&lt;Song&gt; <span class="hljs-title">searchMusic</span><span class="hljs-params">(String searchValue)</span> </span>&#123;<br>    MusicParams musicParams = AESUtil.getMusicParams(searchValue);<br>    HttpHeaders headers = <span class="hljs-keyword">new</span> HttpHeaders();<br>    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);<br>    HttpEntity&lt;MultiValueMap&lt;String, String&gt;&gt; request = <span class="hljs-keyword">new</span> HttpEntity&lt;&gt;(musicParamsToMap(musicParams), headers);<br>    ResponseEntity&lt;String&gt; res = restTemplate.postForEntity(MUSIC_163_PARENT_URL + <span class="hljs-string">"weapi/cloudsearch/get/web"</span>, request, String<span class="hljs-class">.<span class="hljs-keyword">class</span>)</span>;<br>    <span class="hljs-keyword">if</span>(res.getStatusCode() == HttpStatus.OK) &#123;<br>        String songs = FastJsonUtil.getNodeString(res.getBody(), <span class="hljs-string">"result"</span>);<br>        <span class="hljs-keyword">return</span> FastJsonUtil.praseNodeStringToList(songs, <span class="hljs-string">"songs"</span>, Song<span class="hljs-class">.<span class="hljs-keyword">class</span>)</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>另外，前端方面我使用 aplyer 新增了在线播放的功能。（但它好像有些bug）<br><img   class="lazyload" data-original="https://img-blog.csdnimg.cn/20200409164303902.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzkzMzk0,size_16,color_FFFFFF,t_70#pic_center" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="前端页面"></p>
+</blockquote>
+<blockquote>
+<p>项目代码请参考【<a href="https://gitee.com/junanaa/music-dow" target="_blank" rel="noopener">music-dow</a>】,目前只写了一部分，可以搜索下载单曲，批量下载等，歌单下载还在开发，默认下载到 d:\test 文件下，可到 application.properties 文件下修改路径。如果下载不成功，说明那首歌需要vip，你懂的啦。</p>
+</blockquote>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><blockquote>
+<p>1 期间很多测试接口时用到了postman，博客过滤掉了，但不影响您使用。<br>2 网易云接口思路参考了【<a href="https://www.zhihu.com/question/36081767" target="_blank" rel="noopener">这篇文章</a>】。</p>
+</blockquote>
+<blockquote>
+<p><strong>路漫漫其修远兮  吾将上下而求索</strong></p>
+</blockquote>
+
+    </section>
+    <section class="extra">
+      
+      
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B6%E4%BB%96%E6%8A%80%E6%9C%AF/" rel="tag">其他技术</a></li></ul>
+
+      
+<nav class="nav">
+  
+    <a href="/2020/06/14/19%20hexo%E6%90%AD%E5%BB%BA%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/"><i class="iconfont iconleft"></i>hexo 搭建静态博客</a>
+  
+  
+    <a href="/2020/05/06/18%20%E8%87%AA%E5%B7%B1%E5%8A%A8%E6%89%8B%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9APP/">自己动手实现聊天APP<i class="iconfont iconright"></i></a>
+  
+</nav>
+
+    </section>
+    
+      <section class="comments">
+        
+          <div class="btn" id="comments-btn">查看评论</div>
+        
+        
+<div id="valine"></div>
+<script defer src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+  window.onload = function () {
+    var loadValine = function () {
+      new Valine({
+        el: '#valine',
+        app_id: "a8aBoMUoOnc1VQB8luHmCH4Y-gzGzoHsz",
+        app_key: "EEUcoQEF0g8aC9y8tqj1koxE",
+        placeholder: "大爷来玩呀~",
+        avatar: "mp",
+        pageSize: "10",
+        lang: "zh-CN",
+      });
+    }
+    if ( true ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        loadValine();
+      });
+    } else {
+      loadValine();
+    }
+  };
+</script>
+
+      </section>
+    
+  </section>
+</article>
+  </div>
+</main>
+  <footer class="footer">
+  <div class="footer-social">
+    
+    
+    
+    
+    
+    <a href="tencent://message/?Menu=yes&uin=1286890175 " target="_blank" onMouseOver="this.style.color= '#12B7F5'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconQQ "></i>
+    </a>
+    
+    
+    
+    
+    
+    <a href="javascript:; " target="_blank" onMouseOver="this.style.color= '#09BB07'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconwechat-fill "></i>
+    </a>
+    
+    
+    
+    
+    
+    <a href="mailto:chenjunan_2018@163.com " target="_blank" onMouseOver="this.style.color='#FFBE5B'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconmail"></i>
+    </a>
+    
+  </div>
+  <div class="footer-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="http://junanaa.gitee.io/">一只小安仔</a> .AllRightsReserved</p></div>
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  <div class="fab fab-menu">
+    <i class="iconfont iconmenu"></i>
+  </div>
+  
+</body>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+
+<script src="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/justifiedGallery/3.7.0/js/jquery.justifiedGallery.min.js"></script>
+
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+<script>
+  (function () {
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    } else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</html>

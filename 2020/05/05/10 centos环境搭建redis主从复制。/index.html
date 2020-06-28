@@ -1,0 +1,404 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>centos环境搭建redis主从复制。 - 一只小安仔</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+
+  
+  <meta name="keywords" content="一只小安仔,"> 
+  
+  <meta name="description" content="centos环境搭建redis主从复制。今天学习了re..."> 
+  
+  <meta name="author" content="junan"> 
+
+  
+    <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  
+  
+    <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  
+  
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  
+  
+    <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_58xq2j9v1id.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xcode.min.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/justifiedGallery/3.7.0/css/justifiedGallery.min.css">
+
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {}
+    CONFIG = {
+      fancybox: true,
+      pjax: false,
+      lazyload: {
+        enable: true,
+        loadingImage: '/images/theme/loading.gif',
+      },
+      donate_alipay: '',
+      donate_wechat: '',
+      motto: {
+        api: '',
+        default: '夜半花落听雨声，不自欢喜不自愁。'
+      },
+      galleries: {
+        enable: 'true'
+      },
+      fab: {
+        enable: 'true',
+        alwaysShow: 'false'
+      }
+    }
+  </script>
+
+  
+
+  
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body class="lock-screen">
+  <div class="loading"></div>
+  <nav class="menu">
+  <div class="menu-close">
+    <i class="iconfont iconplus"></i>
+  </div>
+  <ul class="menu-content">
+    
+    
+    
+    
+    <li class="menu-item"><a href="/ "> 首页</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/archives "> 归档</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/tags "> 标签</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/categories "> 分类</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/about "> 关于</a></li>
+    
+  </ul>
+  <div class="menu-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="http://junanaa.gitee.io/">一只小安仔</a> .AllRightsReserved</p></div>
+</nav>
+  <main id="main">
+  <div class="container" id="container">
+    <article class="article">
+  <section class="head">
+  <img   class="lazyload" data-original="http://p0.so.qhmsg.com/t01e8daf8ff8c54ae50.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">centos环境搭建redis主从复制。</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>2020-05-05</span
+        class="post-info-item">
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>2817</span>
+    </div>
+  </div>
+</section>
+  <section class="main">
+    <section class="content">
+      <h1 id="centos环境搭建redis主从复制。"><a href="#centos环境搭建redis主从复制。" class="headerlink" title="centos环境搭建redis主从复制。"></a>centos环境搭建redis主从复制。</h1><h1 id="今天学习了redis，记录下。"><a href="#今天学习了redis，记录下。" class="headerlink" title="今天学习了redis，记录下。"></a>今天学习了redis，记录下。</h1><blockquote>
+<p>Redis 是完全开源免费的，遵守BSD协议，是一个高性能的key-value数据库。<br>redis 的优势：<br>1 性能极高 – Redis能读的速度是110000次/s,写的速度是81000次/s 。<br>2 丰富的数据类型 – Redis支持二进制案例的 Strings, Lists, Hashes, Sets 及 Ordered Sets 数据类型操作。<br>3 原子 – Redis的所有操作都是原子性的，意思就是要么成功执行要么失败完全不执行。单个操作是原子性的。多个操作也支持事务，即原子性，通过MULTI和EXEC指令包起来。<br>4 丰富的特性 – Redis还支持 publish/subscribe, 通知, key 过期等等特性。<br>官网： <a href="https://redis.io" target="_blank" rel="noopener">redis</a><br>首先你需要准备一个centos7的环境来玩它，我这里使用的虚拟机环境（如果你有服务器环境更好，省去一些配置。）<br>cnetos7在虚拟机无法连接外网请参考<a href="http://www.anlazy.top/index.php/archives/112/" target="_blank" rel="noopener">这篇文章</a><br>ok 打开centos7终端或通过shell工具连接,我这里使用的是finalshell连接，如需使用请参考<a href="http://www.anlazy.top/index.php/archives/24/" target="_blank" rel="noopener">这篇文章</a><br><img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/289019550.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="连接虚拟机"><br>进入/usr/src目录。</p>
+</blockquote>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-keyword">cd</span> <span class="hljs-string">/usr/src</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p> 下载redis最新的包</p>
+</blockquote>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs angelscript">wget -O redis_5<span class="hljs-number">.0</span><span class="hljs-number">.5</span>.tar.gz http:<span class="hljs-comment">//download.redis.io/releases/redis-5.0.5.tar.gz</span><br></code></pre></td></tr></table></figure>
+<p><img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/2935057210.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="下载redis源码"></p>
+<blockquote>
+<p>你需要知道的是这个下载是下载的源代码，是无法直接运行的，我们先把它解压出来，然后编译它。</p>
+</blockquote>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">tar</span> <span class="hljs-selector-tag">-zxvf</span> <span class="hljs-selector-tag">redis_5</span><span class="hljs-selector-class">.0</span><span class="hljs-selector-class">.5</span><span class="hljs-selector-class">.tar</span><span class="hljs-selector-class">.gz</span>  #解压<br><span class="hljs-selector-tag">cd</span> <span class="hljs-selector-tag">redis_5</span><span class="hljs-selector-class">.0</span><span class="hljs-selector-class">.5</span>                #进入目录<br><span class="hljs-selector-tag">make</span>                          #编译<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>安静的等它编译吧。&gt;&gt;&gt;&gt;&gt;<br>完成之后可以看到如下，目录结构<br><img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/1969545961.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="redis目录"></p>
+</blockquote>
+<blockquote>
+<p>接下来需要修改配置文件了。我们把配置文件拷贝一份到可执行文件目录下去并进入src：</p>
+</blockquote>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">cp redis.conf <span class="hljs-string">./src</span>    <span class="hljs-comment">#copy</span><br><span class="hljs-keyword">cd</span> src                 <span class="hljs-comment">#进入src</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>我们接下来需要修改配置文件</p>
+</blockquote>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">vim</span> redis.<span class="hljs-keyword">conf</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p> 修改bind：如果你需要在外网连接redis，可以修改，如果不需要通过外网来连接，则不做修改：<br> <img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/2941834590.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="修改bind"></p>
+</blockquote>
+<blockquote>
+<p>修改端口，一般不修改，如果有特殊要求，请修改。<br><img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/1954105055.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="修改端口"></p>
+</blockquote>
+<blockquote>
+<p>redis启动有前端启动和后端启动，前端启动就是当你启动之后，如果把启动的窗口关闭了，那么redis就关闭了，后端启动就是只要服务器不关它就一直在后端运行，他默认是前端启动即no，需要设置后端启动可改为yes<br><img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/3776709978.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="修改后端启动"></p>
+</blockquote>
+<blockquote>
+<p>点击esc+：wq保存退出。</p>
+</blockquote>
+<blockquote>
+<p>启动redis：</p>
+</blockquote>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs axapta">./redis-<span class="hljs-keyword">server</span> redis.conf   <span class="hljs-meta"># 指定redis启动需要读取的配置文件</span><br></code></pre></td></tr></table></figure>
+<p><img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/3549113185.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="启动redis"></p>
+<blockquote>
+<p>接下来使用redis-cli工具连接，这个工具它自己带的，src下有的：</p>
+</blockquote>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-string">./redis-cli</span> <span class="hljs-string">-h</span> <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span> <span class="hljs-string">-p</span> <span class="hljs-number">6379</span>    <span class="hljs-comment">#指定连接的ip和端口</span><br></code></pre></td></tr></table></figure>
+
+<p><img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/2297941950.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="连接redis"></p>
+<blockquote>
+<p>这样就代表连接成功。可以适当操作一下：<br><img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/4006939664.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="使用redis"></p>
+</blockquote>
+<blockquote>
+<p>redis相关的命令下次再写篇文章。</p>
+</blockquote>
+<hr>
+<h1 id="接下来开始学习主从复制"><a href="#接下来开始学习主从复制" class="headerlink" title="接下来开始学习主从复制"></a>接下来开始学习主从复制</h1><blockquote>
+<p>主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点(master/leader)，后者称为从节点(slave/follower)；数据的复制是单向的，只能由主节点到从节点。</p>
+</blockquote>
+<blockquote>
+<p>为什么要使用主从复制呢？<br>1 数据冗余：主从复制实现了数据的热备份，是持久化之外的一种数据冗余方式。<br>2 故障恢复：当主节点出现问题时，可以由从节点提供服务，实现快速的故障恢复；实际上是一种服务的冗余。<br>3 负载均衡：在主从复制的基础上，配合读写分离，可以由主节点提供写服务，由从节点提供读服务（即写Redis数据时应用连接主节点，读Redis数据时应用连接从节点），分担服务器负载；尤其是在写少读多的场景下，通过多个从节点分担读负载，可以大大提高Redis服务器的并发量。<br>4 高可用基石：除了上述作用以外，主从复制还是哨兵和集群能够实施的基础，因此说主从复制是Redis高可用的基础。</p>
+</blockquote>
+<blockquote>
+<p>主从复制的缺点：<br>1 由于主从复制的命令传播是异步的，延迟与数据的不一致不可避免。只能尽力减小延迟。<br>2 读到过期数据：redis在删除过期key的时候，是有两种策略，第一种是懒惰型策略，即只有当redis操作这个key的时候，发现这个key过期，就会把这个key删除。第二种是定期采样一些key进行删除。如果我们过期key的数量非常多，而采样速度根本比不上过期key的生成速度时会造成很多过期数据没有删除，但在redis里master和slave达成一种协议，slave是不能处理数据的（即不能删除数据）而我们的客户端没有及时读到到过期数据同步给master将key删除，就会导致slave读到过期的数据。这个问题在3.2版本之上已经解决。<br> 3 主从配置不一致：这个问题就可能出现多种诡异的问题。<br> 4 规避全量复制：redis复制有<strong>全量复制</strong>和<strong>部分复制</strong>两种，全量复制是当一台从节点第一次去挂到主节点上时，需要从主节点全部拷贝数据。这个全量复制很消耗时间和资源（解决：1小主节点，2规避时间）。</p>
+</blockquote>
+<blockquote>
+<p>好了，我们具体尝试一下主从复制。<br>这里我们使用两个redis来演示（不用开两个虚拟机哈），一个主节点，一个从节点我们把src文件复制一份就行，每个src文件下面都有执行命令和一个配置文件嘛，这也是最初拷贝配置文件的原因。</p>
+</blockquote>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-keyword">cd</span> <span class="hljs-string">/usr/src/redis-5.0.5/</span>     <span class="hljs-comment">#进入redis目录</span><br>cp -r  src <span class="hljs-string">./src-6380</span>        <span class="hljs-comment">#递归复制src文件夹</span><br><span class="hljs-keyword">cd</span> src-6380                  <span class="hljs-comment">#进入第二个redis</span><br>vim redis.conf<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>修改端口为6380<br><img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/2218054865.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="修改端口为6380"></p>
+</blockquote>
+<p><img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/4257580005.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="配置主节点ip和端口"></p>
+<blockquote>
+<p>保证之前6379的redis还是启动的，因为用它作为主节点</p>
+</blockquote>
+<p><img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/1707214551.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<blockquote>
+<p>接下来启动从节点。</p>
+</blockquote>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs axapta">./redis-<span class="hljs-keyword">server</span> redis.conf<br></code></pre></td></tr></table></figure>
+<p><img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/1609837925.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="启动从节点"></p>
+<blockquote>
+<p> 打开redis-cli连接主节点：</p>
+</blockquote>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-string">./redis-cli</span> <span class="hljs-string">-h</span> <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span> <span class="hljs-string">-p</span> <span class="hljs-number">6379</span>    <span class="hljs-comment">#连接6379</span><br><span class="hljs-string">set</span> <span class="hljs-string">name</span> <span class="hljs-string">chenjunan</span>                  <span class="hljs-comment">#写入</span><br><span class="hljs-string">exit</span>                                <span class="hljs-string">退出连接</span><br></code></pre></td></tr></table></figure>
+<p><img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/3063505506.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="连接主节点"></p>
+<blockquote>
+<p>连接从节点</p>
+</blockquote>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs angelscript">./redis-cli -h <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span> -p <span class="hljs-number">6380</span><br><span class="hljs-keyword">get</span> name<br></code></pre></td></tr></table></figure>
+<p><img   class="lazyload" data-original="http://www.anlazy.top/usr/uploads/2019/11/2128415514.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt=""></p>
+<blockquote>
+<p>可以看到，从节点能获取到主节点存的数据，主从复制搭建成功。<br>需要注意的是：<strong>只有主节点能写入数据，从节点不能写入数据。</strong>，不信你试试。</p>
+</blockquote>
+
+    </section>
+    <section class="extra">
+      
+      
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">服务器</a></li></ul>
+
+      
+<nav class="nav">
+  
+    <a href="/2020/05/05/1%20hello-world/"><i class="iconfont iconleft"></i>Hello World</a>
+  
+  
+</nav>
+
+    </section>
+    
+      <section class="comments">
+        
+          <div class="btn" id="comments-btn">查看评论</div>
+        
+        
+<div id="valine"></div>
+<script defer src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+  window.onload = function () {
+    var loadValine = function () {
+      new Valine({
+        el: '#valine',
+        app_id: "a8aBoMUoOnc1VQB8luHmCH4Y-gzGzoHsz",
+        app_key: "EEUcoQEF0g8aC9y8tqj1koxE",
+        placeholder: "大爷来玩呀~",
+        avatar: "mp",
+        pageSize: "10",
+        lang: "zh-CN",
+      });
+    }
+    if ( true ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        loadValine();
+      });
+    } else {
+      loadValine();
+    }
+  };
+</script>
+
+      </section>
+    
+  </section>
+</article>
+  </div>
+</main>
+  <footer class="footer">
+  <div class="footer-social">
+    
+    
+    
+    
+    
+    <a href="tencent://message/?Menu=yes&uin=1286890175 " target="_blank" onMouseOver="this.style.color= '#12B7F5'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconQQ "></i>
+    </a>
+    
+    
+    
+    
+    
+    <a href="javascript:; " target="_blank" onMouseOver="this.style.color= '#09BB07'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconwechat-fill "></i>
+    </a>
+    
+    
+    
+    
+    
+    <a href="mailto:chenjunan_2018@163.com " target="_blank" onMouseOver="this.style.color='#FFBE5B'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconmail"></i>
+    </a>
+    
+  </div>
+  <div class="footer-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="http://junanaa.gitee.io/">一只小安仔</a> .AllRightsReserved</p></div>
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  <div class="fab fab-menu">
+    <i class="iconfont iconmenu"></i>
+  </div>
+  
+</body>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+
+<script src="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/justifiedGallery/3.7.0/js/jquery.justifiedGallery.min.js"></script>
+
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+<script>
+  (function () {
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    } else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</html>

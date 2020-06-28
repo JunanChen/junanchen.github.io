@@ -1,0 +1,410 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>如何优雅的数组转集合 - 一只小安仔</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+
+  
+  <meta name="keywords" content="一只小安仔,"> 
+  
+  <meta name="description" content="如何优雅的数组转集合
+有的同学肯定想到了Arrays...."> 
+  
+  <meta name="author" content="junan"> 
+
+  
+    <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  
+  
+    <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  
+  
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  
+  
+    <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_58xq2j9v1id.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xcode.min.css">
+
+  
+
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/justifiedGallery/3.7.0/css/justifiedGallery.min.css">
+
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {}
+    CONFIG = {
+      fancybox: true,
+      pjax: false,
+      lazyload: {
+        enable: true,
+        loadingImage: '/images/theme/loading.gif',
+      },
+      donate_alipay: '',
+      donate_wechat: '',
+      motto: {
+        api: '',
+        default: '夜半花落听雨声，不自欢喜不自愁。'
+      },
+      galleries: {
+        enable: 'true'
+      },
+      fab: {
+        enable: 'true',
+        alwaysShow: 'false'
+      }
+    }
+  </script>
+
+  
+
+  
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body class="lock-screen">
+  <div class="loading"></div>
+  <nav class="menu">
+  <div class="menu-close">
+    <i class="iconfont iconplus"></i>
+  </div>
+  <ul class="menu-content">
+    
+    
+    
+    
+    <li class="menu-item"><a href="/ "> 首页</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/archives "> 归档</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/tags "> 标签</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/categories "> 分类</a></li>
+    
+    
+    
+    
+    <li class="menu-item"><a href="/about "> 关于</a></li>
+    
+  </ul>
+  <div class="menu-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="http://junanaa.gitee.io/">一只小安仔</a> .AllRightsReserved</p></div>
+</nav>
+  <main id="main">
+  <div class="container" id="container">
+    <article class="article">
+  <section class="head">
+  <img   class="lazyload" data-original="http://img1.juimg.com/190417/96244-1Z41G9400313.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">如何优雅的数组转集合</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>2020-05-05</span
+        class="post-info-item">
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>5867</span>
+    </div>
+  </div>
+</section>
+  <section class="main">
+    <section class="content">
+      <h1 id="如何优雅的数组转集合"><a href="#如何优雅的数组转集合" class="headerlink" title="如何优雅的数组转集合"></a>如何优雅的数组转集合</h1><blockquote>
+<p>有的同学肯定想到了Arrays.toList()方法，经常会写下如下代码。</p>
+</blockquote>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">List <span class="hljs-built_in">list</span> = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Arrays</span>.</span></span><span class="hljs-keyword">as</span><span class="hljs-constructor">List(<span class="hljs-string">"张三"</span>, <span class="hljs-string">"李四"</span>, <span class="hljs-string">"王五"</span>)</span>;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>可是，这样真的没有问题吗？ 如果运行这句代码呢？</p>
+</blockquote>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile">list.<span class="hljs-keyword">add</span><span class="bash">(<span class="hljs-string">"赵六"</span>);</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>是不是瞬间报错，一脸懵逼，一顿抓耳挠腮后还是打开百度询问原因。<br>我在阿里开发手册看到这个问题的解答。<br><img   class="lazyload" data-original="https://www.anlazy.top/usr/uploads/2020/02/3454633558.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="Arrays.toList()"></p>
+</blockquote>
+<blockquote>
+<p>其实比较简单，我打开源码看看你就明白了。进入Arrays.toList()方法。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 这是Arrays类里面</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> &lt;T&gt; <span class="hljs-function">List&lt;T&gt; <span class="hljs-title">asList</span><span class="hljs-params">(T... a)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> ArrayList&lt;&gt;(a);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p> <strong>这个ArrayList点进去发现不是java.util.ArrayList，而是Arrays自己搞的一个ArrayList</strong>。</p>
+</blockquote>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-comment">// 下面这一坨都在Arrays类的内部</span><br><span class="hljs-keyword">private</span> static <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ArrayList&lt;E&gt;</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractList&lt;E&gt;</span></span><br><span class="hljs-class">          <span class="hljs-title">implements</span> <span class="hljs-title">RandomAccess</span>, <span class="hljs-title">java</span>.<span class="hljs-title">io</span>.<span class="hljs-title">Serializable</span></span><br><span class="hljs-class"></span>&#123;<br>    <span class="hljs-keyword">private</span> static <span class="hljs-keyword">final</span> long serialVersionUID = <span class="hljs-number">-2764017481108945198</span>L;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">E</span>[] a;<br><br>    <span class="hljs-type">ArrayList</span>(<span class="hljs-type">E</span>[] array) &#123;<br>    a = <span class="hljs-type">Objects</span>.requireNonNull(array);<br>    &#125;<br><br> .....<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>仔细看你可以发现这个ArrayList也继承了AbstractList，AbstractList实现了List接口，所以这个ArrayList可以被List引用。可是假的ArrayList终究是假的，没有真的那么好使。比如在调用add()，remove()， clear()方法时会报出java.lang.UnsupportedOperationException这个异常。这是为什么呢？</p>
+</blockquote>
+<blockquote>
+<p>我看了一圈发现这个假的ArrayList压根没重写add()，remove()， clear()。那调用的时候调的谁的方法呢。哈哈，当然是AbstractList的了。我们可以去看看。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// AbstractList内部</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> E <span class="hljs-title">remove</span><span class="hljs-params">(<span class="hljs-keyword">int</span> index)</span> </span>&#123;<br>    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> UnsupportedOperationException();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>你以为它的坑到此为止？不防试试如下代码。</p>
+</blockquote>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-built_in">int</span><span class="hljs-literal">[]</span> myArray = &#123; <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> &#125;;  <span class="hljs-comment">// 如果是Integer[] myArray = &#123; 1, 2, 3 &#125;;就不会有错</span><br>List myList = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Arrays</span>.</span></span><span class="hljs-keyword">as</span><span class="hljs-constructor">List(<span class="hljs-params">myArray</span>)</span>;<br><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(myList.size<span class="hljs-literal">()</span>);<span class="hljs-comment">//1</span><br><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(myList.get(<span class="hljs-number">0</span>));<span class="hljs-comment">//数组地址值</span><br><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(myList.get(<span class="hljs-number">1</span>));<span class="hljs-comment">//报错：ArrayIndexOutOfBoundsException</span><br><span class="hljs-built_in">int</span> <span class="hljs-literal">[]</span> <span class="hljs-built_in">array</span>=(<span class="hljs-built_in">int</span><span class="hljs-literal">[]</span>) myList.get(<span class="hljs-number">0</span>);<br><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(<span class="hljs-built_in">array</span><span class="hljs-literal">[<span class="hljs-number">0</span>]</span>);<span class="hljs-comment">//1</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>看上去没有问题，一运行全是错。因为我们这里定义的数组是int[] ,而不是Integer，你再瞧瞧这个Arrays.toList()方法。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 这里传的是泛型对象数组</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> &lt;T&gt; <span class="hljs-function">List&lt;T&gt; <span class="hljs-title">asList</span><span class="hljs-params">(T... a)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> ArrayList&lt;&gt;(a);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>传的参数必须是对象数组，你传的 int[] myArray 它会把它看成<strong>一个</strong>整体的对象，<strong>不会</strong>去拿到里面的元素然后转成Integer。so ： 传递的数组必须是对象数组，而不是基本类型。</p>
+</blockquote>
+<h1 id="是不是Arrays-toList-太难用了，那怎么更好的数组转集合呢？"><a href="#是不是Arrays-toList-太难用了，那怎么更好的数组转集合呢？" class="headerlink" title="是不是Arrays.toList() 太难用了，那怎么更好的数组转集合呢？"></a>是不是Arrays.toList() 太难用了，那怎么更好的数组转集合呢？</h1><blockquote>
+<p>1  自己实现一个工具类，去拿到里面的全部元素再放入集合。（但自己实现总是不愿意）<br>2  List list = new ArrayList&lt;&gt;(Arrays.asList(“a”, “b”, “c”)) 直接用真的ArrayList把它包起来，哈哈稳了。就是可能效率不高。<br>3  JDK8的stream来提提性能：</p>
+</blockquote>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">Integer <span class="hljs-literal">[]</span> myArray = &#123; <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> &#125;;<br>List myList = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Arrays</span>.</span></span>stream(myArray).collect(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Collectors</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">List()</span>);<br><span class="hljs-comment">// boxed 进行装箱操作（基本类型必须装箱）</span><br><span class="hljs-built_in">int</span> <span class="hljs-literal">[]</span> myArray2 = &#123; <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> &#125;;<br>List myList = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Arrays</span>.</span></span>stream(myArray2).boxed<span class="hljs-literal">()</span>.collect(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Collectors</span>.</span></span><span class="hljs-keyword">to</span><span class="hljs-constructor">List()</span>);<br></code></pre></td></tr></table></figure>
+
+<h1 id="到这其实差不多已经结束了，但其实这篇文章想讲的不是这个，而是阿里手册上说Arrays-toList-体现了适配器模式，我想知道为什么体现了适配器模式？（不好意思各位，最近耍的太过了，整个人有点傻了，都不知道一篇文章要写啥。好吧，其实就是因为‘体现了适配器模式’这句话，才有了这篇文章，如果对以下内容不感兴趣，或者阅读途中出现眩晕，恶心等症状，请及时退出阅读。谢谢）"><a href="#到这其实差不多已经结束了，但其实这篇文章想讲的不是这个，而是阿里手册上说Arrays-toList-体现了适配器模式，我想知道为什么体现了适配器模式？（不好意思各位，最近耍的太过了，整个人有点傻了，都不知道一篇文章要写啥。好吧，其实就是因为‘体现了适配器模式’这句话，才有了这篇文章，如果对以下内容不感兴趣，或者阅读途中出现眩晕，恶心等症状，请及时退出阅读。谢谢）" class="headerlink" title="到这其实差不多已经结束了，但其实这篇文章想讲的不是这个，而是阿里手册上说Arrays.toList()体现了适配器模式，我想知道为什么体现了适配器模式？（不好意思各位，最近耍的太过了，整个人有点傻了，都不知道一篇文章要写啥。好吧，其实就是因为‘体现了适配器模式’这句话，才有了这篇文章，如果对以下内容不感兴趣，或者阅读途中出现眩晕，恶心等症状，请及时退出阅读。谢谢）"></a>到这其实差不多已经结束了，但其实这篇文章想讲的不是这个，而是阿里手册上说Arrays.toList()体现了适配器模式，我想知道为什么体现了适配器模式？（不好意思各位，最近耍的太过了，整个人有点傻了，都不知道一篇文章要写啥。好吧，其实就是因为‘体现了适配器模式’这句话，才有了这篇文章，如果对以下内容不感兴趣，或者阅读途中出现眩晕，恶心等症状，请及时退出阅读。谢谢）</h1><h1 id="适配器模式-Adapter-Pattern"><a href="#适配器模式-Adapter-Pattern" class="headerlink" title="适配器模式(Adapter Pattern)"></a>适配器模式(Adapter Pattern)</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><blockquote>
+<p>将一个接口转换成希望的另一个接口，使接口不兼容的那些类可以一起工作。<br>不理解没关系，举个栗子，中国国民用电电压220v，我的笔记本充电只接受19v，那咋个整，于是有了电源适配器（你习惯叫它充电器），它将220v电压转成19v给笔记本充电。<br><img   class="lazyload" data-original="https://www.anlazy.top/usr/uploads/2020/02/2996734146.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="笔记本充电"></p>
+</blockquote>
+<h2 id="角色概念"><a href="#角色概念" class="headerlink" title="角色概念"></a>角色概念</h2><blockquote>
+<p>Target（目标抽象类） 所希望的接口或类，例子中的电源输出（19v）<br>Adapter（适配器类）  可以调用另一个接口，作为一个转换器，对Adaptee和Target进行适配，例子中的电源适配器<br>Adaptee（适配者类）  适配者类一般是一个具体类，包含了客户希望使用的业务方法，例子中的电源输入（220v）</p>
+</blockquote>
+<h2 id="代码实现：实现适配器模式两种办法：类适配器，对象适配器"><a href="#代码实现：实现适配器模式两种办法：类适配器，对象适配器" class="headerlink" title="代码实现：实现适配器模式两种办法：类适配器，对象适配器"></a>代码实现：<strong>实现适配器模式两种办法：类适配器，对象适配器</strong></h2><h3 id="1-类适配器"><a href="#1-类适配器" class="headerlink" title="1 类适配器"></a>1 类适配器</h3><blockquote>
+<p>被适配的类（Adaptee）：</p>
+</blockquote>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Adaptee</span> &#123;</span><br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">method2</span><span class="hljs-params">()</span> </span>&#123;<br>        System.out.<span class="hljs-built_in">println</span>(<span class="hljs-string">"adaptee method2"</span>);<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>目标接口（Target）：</p>
+</blockquote>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs routeros">public<span class="hljs-built_in"> interface </span>Target &#123;<br><br>    void method1();<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如何使Target的method1()方法中调用Adaptee的method2()？直接实现，肯定不行。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TargetImpl</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Target</span> </span>&#123;<br>    <span class="hljs-comment">// 没法调用Adaptee 的method2()</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">method1</span><span class="hljs-params">()</span> </span>&#123;<br>        System.out.println(<span class="hljs-string">"method1"</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>但是TargetImpl如果继承Adaptee 貌似可以。</p>
+</blockquote>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs aspectj"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Adapter</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Adaptee</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Target</span></span>&#123;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">method1</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">super</span>.method2();<br>        System.out.println(<span class="hljs-string">"method1"</span>);<br><br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        Target <span class="hljs-keyword">target</span> = <span class="hljs-keyword">new</span> Adapter();<br>        <span class="hljs-keyword">target</span>.method1();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p><img   class="lazyload" data-original="https://www.anlazy.top/usr/uploads/2020/02/2110616594.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  alt="类适配器"></p>
+</blockquote>
+<h3 id="2-对象适配器"><a href="#2-对象适配器" class="headerlink" title="2 对象适配器"></a>2 对象适配器</h3><blockquote>
+<p>实现上面的相同功能，但不考虑继承。只是把adaptee 作为成员变量，如下：</p>
+</blockquote>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs aspectj"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Adapter2</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Target</span></span>&#123;<br><br>    <span class="hljs-keyword">private</span> Adaptee adaptee = <span class="hljs-keyword">new</span> Adaptee();<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">method1</span><span class="hljs-params">()</span> </span>&#123;<br>        adaptee.method2();<br>        System.out.println(<span class="hljs-string">"method1"</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        Target <span class="hljs-keyword">target</span> = <span class="hljs-keyword">new</span> Adapter2();<br>        <span class="hljs-keyword">target</span>.method1();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="深入理解"><a href="#深入理解" class="headerlink" title="深入理解"></a>深入理解</h2><blockquote>
+<p>我们通过探寻spring aop源代码进行理解。<br>我们都知道spring的aop有切面，切入点，通知等概念。而通知有BeforeAdvice（前置通知）、AfterAdvice（后置通知）、ThrowsAdvice（异常通知）。而aop的实现需要靠Interceptor（拦截器）来实现，所以需要将Advice（通知）转换成Interceptor（拦截器），这里的转换就需要用到适配器模式来转换，因为不同Advice（通知）需要转换成不同的Interceptor（拦截器），所以需要适配。</p>
+</blockquote>
+<blockquote>
+<p>我们拿 MethodBeforeAdvice 举例，前置通知需要转换成为拦截器，就需要用到 MethodBeforeAdviceAdapter（前置通知适配器），以下是源码享受：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MethodBeforeAdviceAdapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">AdvisorAdapter</span>, <span class="hljs-title">Serializable</span> </span>&#123;        <span class="hljs-comment">// 默认private没有子类</span><br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">supportsAdvice</span><span class="hljs-params">(Advice advice)</span> </span>&#123;<br>                <span class="hljs-comment">// 此适配器仅支持 MethodBeforeAdvice 类型</span><br>		<span class="hljs-keyword">return</span> (advice <span class="hljs-keyword">instanceof</span> MethodBeforeAdvice);<br>	&#125;<br><br>        <span class="hljs-comment">// 此方法把Advisor（切面）转换为拦截器</span><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> MethodInterceptor <span class="hljs-title">getInterceptor</span><span class="hljs-params">(Advisor advisor)</span> </span>&#123;<br>		MethodBeforeAdvice advice = (MethodBeforeAdvice) advisor.getAdvice();  <span class="hljs-comment">// 获取通知</span><br>		<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> MethodBeforeAdviceInterceptor(advice);   <span class="hljs-comment">// 转为拦截器</span><br>	&#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>拦截器又怎么做 aop 的呢？去看看就知道了</p>
+</blockquote>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs aspectj"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MethodBeforeAdviceInterceptor</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">MethodInterceptor</span>, <span class="hljs-title">BeforeAdvice</span>, <span class="hljs-title">Serializable</span> </span>&#123;<br><br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> MethodBeforeAdvice advice;<br><br><br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * Create a new MethodBeforeAdviceInterceptor for the given advice.</span><br><span class="hljs-comment">	 * <span class="hljs-doctag">@param</span> advice the MethodBeforeAdvice to wrap</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MethodBeforeAdviceInterceptor</span><span class="hljs-params">(MethodBeforeAdvice advice)</span> </span>&#123;<br>		Assert.notNull(advice, <span class="hljs-string">"Advice must not be null"</span>);<br>		<span class="hljs-keyword">this</span>.advice = advice;<br>	&#125;<br><br>        <span class="hljs-comment">//  这 invoke 方法很熟悉嘛</span><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-function">Object <span class="hljs-title">invoke</span><span class="hljs-params">(MethodInvocation mi)</span> <span class="hljs-keyword">throws</span> Throwable </span>&#123;<br>		<span class="hljs-keyword">this</span>.advice.<span class="hljs-keyword">before</span>(mi.<span class="hljs-title">getMethod</span>(), mi.getArguments(), mi.getThis());<br>		<span class="hljs-function"><span class="hljs-keyword">return</span> mi.<span class="hljs-title">proceed</span><span class="hljs-params">()</span></span>;   <br>	&#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>看嘛， 拦截器也用的是代理来实现切面的功能的。<br>这里再理一次思路。首先明白，适配器模式是把一个接口转换成客户想要的一个接口。在aop里面，最终实现是依靠拦截器里的invock方法来玩的（因此它是目标接口），也就是动态代理那种思想。也就是说我最终调用的时候是调用拦截器的invock方法。可现在只给我Advisor （切面）（切面是原接口），我需要把切面转换为一个拦截器。另外不同的通知需要采取不同的适配器，每种适配器只能适配一种通知。</p>
+</blockquote>
+
+    </section>
+    <section class="extra">
+      
+      
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="tag">Java基础</a></li></ul>
+
+      
+<nav class="nav">
+  
+    <a href="/2020/05/06/18%20%E8%87%AA%E5%B7%B1%E5%8A%A8%E6%89%8B%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9APP/"><i class="iconfont iconleft"></i>自己动手实现聊天APP</a>
+  
+  
+    <a href="/2020/05/05/4%20Java%20%E5%BC%80%E5%8F%91%E5%8C%BA%E5%9D%97%E9%93%BE%EF%BC%883%EF%BC%89/">Java 开发区块链（3）<i class="iconfont iconright"></i></a>
+  
+</nav>
+
+    </section>
+    
+      <section class="comments">
+        
+          <div class="btn" id="comments-btn">查看评论</div>
+        
+        
+<div id="valine"></div>
+<script defer src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+  window.onload = function () {
+    var loadValine = function () {
+      new Valine({
+        el: '#valine',
+        app_id: "a8aBoMUoOnc1VQB8luHmCH4Y-gzGzoHsz",
+        app_key: "EEUcoQEF0g8aC9y8tqj1koxE",
+        placeholder: "大爷来玩呀~",
+        avatar: "mp",
+        pageSize: "10",
+        lang: "zh-CN",
+      });
+    }
+    if ( true ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        loadValine();
+      });
+    } else {
+      loadValine();
+    }
+  };
+</script>
+
+      </section>
+    
+  </section>
+</article>
+  </div>
+</main>
+  <footer class="footer">
+  <div class="footer-social">
+    
+    
+    
+    
+    
+    <a href="tencent://message/?Menu=yes&uin=1286890175 " target="_blank" onMouseOver="this.style.color= '#12B7F5'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconQQ "></i>
+    </a>
+    
+    
+    
+    
+    
+    <a href="javascript:; " target="_blank" onMouseOver="this.style.color= '#09BB07'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconwechat-fill "></i>
+    </a>
+    
+    
+    
+    
+    
+    <a href="mailto:chenjunan_2018@163.com " target="_blank" onMouseOver="this.style.color='#FFBE5B'"
+      onMouseOut="this.style.color='#33333D'">
+      <i class="iconfont footer-social-item  iconmail"></i>
+    </a>
+    
+  </div>
+  <div class="footer-copyright"><p>Copyright© 2019-2020 | <a target="_blank" href="http://junanaa.gitee.io/">一只小安仔</a> .AllRightsReserved</p></div>
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  <div class="fab fab-menu">
+    <i class="iconfont iconmenu"></i>
+  </div>
+  
+</body>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+
+<script src="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/justifiedGallery/3.7.0/js/jquery.justifiedGallery.min.js"></script>
+
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+<script>
+  (function () {
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+      bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    } else {
+      bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</html>
